@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#03050b">
+<title>Nova Verse — Advanced AI Universe</title>
+<style>
+:root{
+  --bg:#03050b;--panel:#070b14;--panel2:#0a101c;--card:#0b1220;
+  --text:#e8eefc;--muted:#93a4c3;--line:rgba(255,255,255,.09);
+  --accent:#7c5cff;--accent2:#00d4ff;--good:#34d399;--danger:#fb7185;
+  --shadow:0 18px 60px rgba(0,0,0,.35);--radius:22px
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:
+radial-gradient(circle at 15% 10%,rgba(124,92,255,.18),transparent 30%),
+radial-gradient(circle at 90% 20%,rgba(0,212,255,.12),transparent 25%),var(--bg);
+color:var(--text);min-height:100vh;overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.app{display:flex;min-height:100vh}
+.sidebar{position:fixed;z-index:20;left:0;top:0;bottom:0;width:270px;padding:20px 16px;
+background:rgba(5,8,16,.96);backdrop-filter:blur(22px);border-right:1px solid var(--line);
+overflow:auto;transition:.3s}
+.brand{display:flex;align-items:center;gap:12px;padding:8px 10px 20px}
+.logo{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;font-weight:900;
+background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 35px rgba(124,92,255,.35)}
+.brand h1{font-size:20px}.brand small{color:var(--muted)}
+.nav-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;padding:12px 12px 7px}
+.nav{display:grid;gap:6px}
+.nav button{border:0;background:transparent;color:var(--muted);padding:12px;border-radius:14px;
+text-align:left;display:flex;align-items:center;gap:12px;transition:.2s}
+.nav button:hover,.nav button.active{background:linear-gradient(90deg,rgba(124,92,255,.18),rgba(0,212,255,.07));color:var(--text)}
+.nav button.active{box-shadow:inset 3px 0 var(--accent)}
+.nav .ico{width:22px;text-align:center}
+.sidebar-bottom{margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}
+.main{margin-left:270px;width:calc(100% - 270px);min-height:100vh;padding:22px 28px 60px}
+.topbar{height:64px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;
+background:rgba(4,7,14,.96);backdrop-filter:blur(18px)}
+.searchbox{flex:1;max-width:720px;position:relative}
+.searchbox input{width:100%;padding:14px 46px 14px 17px;border-radius:16px;border:1px solid var(--line);
+background:#060b15;color:var(--text);outline:none}
+.searchbox input:focus{border-color:rgba(124,92,255,.65);box-shadow:0 0 0 4px rgba(124,92,255,.08)}
+.searchbox span{position:absolute;right:15px;top:12px;color:var(--muted)}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.iconbtn,.btn{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);
+padding:11px 14px;border-radius:13px;transition:.2s}
+.iconbtn:hover,.btn:hover{transform:translateY(-1px);border-color:rgba(124,92,255,.55);background:rgba(124,92,255,.12)}
+.btn.primary{border:0;background:linear-gradient(135deg,var(--accent),#5d8cff);box-shadow:0 10px 30px rgba(124,92,255,.2)}
+.btn.danger{color:#fecdd3;border-color:rgba(251,113,133,.25)}
+.mobile-menu{display:none}
+.page{display:none;animation:pageIn .35s ease}.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{margin-top:22px;padding:34px;border:1px solid var(--line);border-radius:30px;position:relative;overflow:hidden;
+background:linear-gradient(135deg,rgba(124,92,255,.17),rgba(0,212,255,.06) 45%,rgba(255,255,255,.025))}
+.hero:before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;right:-90px;top:-130px;
+background:radial-gradient(circle,rgba(0,212,255,.22),transparent 65%)}
+.hero h2{font-size:clamp(30px,5vw,58px);line-height:1.02;max-width:800px}
+.gradient{background:linear-gradient(90deg,#fff,var(--accent2),#a78bfa);-webkit-background-clip:text;color:transparent}
+.hero p{max-width:760px;color:var(--muted);font-size:16px;line-height:1.7;margin:16px 0 22px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+.stat,.card{background:#0b1220;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stat{padding:20px}.stat b{font-size:27px}.stat span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:30px 0 14px}
+.section-head h3{font-size:22px}.section-head p{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{padding:19px;transition:.22s}.card:hover{transform:translateY(-3px);border-color:rgba(124,92,255,.35)}
+.card .bigico{font-size:30px;margin-bottom:12px}.card h4{font-size:17px;margin-bottom:7px}.card p{font-size:13px;line-height:1.6;color:var(--muted)}
+.badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(124,92,255,.12);
+color:#c4b5fd;font-size:11px;margin-bottom:10px}
+.tool-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tool{padding:17px;border:1px solid var(--line);border-radius:18px;background:#080e1a}
+.tool button{width:100%;margin-top:12px}
+.panel{padding:22px;background:#080d18;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.field{display:grid;gap:7px;margin-bottom:14px}.field label{font-size:12px;color:var(--muted)}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#060b15;color:var(--text);
+border-radius:13px;padding:12px;outline:none}.field textarea{min-height:110px;resize:vertical}
+.ai-layout{display:grid;grid-template-columns:1fr 290px;gap:15px;margin-top:20px}
+.chat{height:62vh;min-height:470px;display:flex;flex-direction:column}.messages{flex:1;overflow:auto;padding:6px}
+.msg{display:flex;gap:10px;margin:12px 0}.avatar{width:35px;height:35px;border-radius:12px;display:grid;place-items:center;
+background:linear-gradient(135deg,var(--accent),var(--accent2));flex:none;font-size:14px}
+.bubble{max-width:85%;padding:12px 14px;border-radius:15px;background:rgba(255,255,255,.035);line-height:1.65;font-size:14px}
+.msg.user{justify-content:flex-end}.msg.user .avatar{order:2;background:rgba(255,255,255,.055)}
+.msg.user .bubble{background:linear-gradient(135deg,rgba(124,92,255,.24),rgba(0,212,255,.08))}
+.chat-input{display:flex;gap:8px;border-top:1px solid var(--line);padding-top:12px}.chat-input input{flex:1}
+.quick{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}.quick button{border:1px solid var(--line);background:transparent;color:var(--muted);
+border-radius:999px;padding:7px 10px;font-size:11px}
+.result{padding:15px;border:1px solid var(--line);border-radius:16px;margin:10px 0;background:rgba(255,255,255,.025)}
+.result h4{margin-bottom:6px}.result p{font-size:13px;color:var(--muted);line-height:1.5}
+
+
+body.game-screen-active{overflow:hidden!important}
+body.game-screen-active .game-close{display:block!important}
+.game-area button{pointer-events:auto;cursor:pointer}
+.game-area.game-open{
+  position:fixed!important;
+  z-index:5000;
+  inset:0;
+  width:100vw!important;
+  height:100vh!important;
+  max-width:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  padding:clamp(18px,4vw,45px)!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+  background:rgba(4,8,18,.96)!important;
+  backdrop-filter:blur(18px);
+}
+.game-area.game-open > div{
+  width:min(900px,96vw);
+  max-height:90vh;
+  overflow:auto;
+  padding:clamp(18px,4vw,35px);
+  border:1px solid var(--line);
+  border-radius:26px;
+  background:linear-gradient(145deg,rgba(18,29,52,.98),rgba(10,16,31,.98));
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
+}
+.game-close{
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:5002;
+  width:46px;
+  height:46px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--panel2);
+  color:var(--text);
+  font-size:22px;
+  cursor:pointer;
+}
+.game-close:hover{transform:scale(1.05)}
+
+.game-area{min-height:330px;display:grid;place-items:center;text-align:center}.game-board{display:grid;grid-template-columns:repeat(3,70px);gap:8px}
+.cell{width:70px;height:70px;border:1px solid var(--line);border-radius:14px;background:#0a1222;color:var(--text);font-size:28px}
+canvas{max-width:100%;border-radius:18px;border:1px solid var(--line);background:#07101f}
+.todo{display:flex;gap:8px}.todo input{flex:1}.task{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.task.done span{text-decoration:line-through;color:#64748b}.task span{flex:1}.task button{border:0;background:transparent;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);z-index:50;display:none;place-items:center;padding:20px}
+.modal.show{display:grid}.modalbox{width:min(650px,100%);background:#0d1426;border:1px solid var(--line);border-radius:24px;padding:22px}
+.toast{position:fixed;right:22px;bottom:22px;z-index:100;background:#0d1426;border:1px solid var(--line);padding:13px 16px;
+border-radius:14px;box-shadow:var(--shadow);display:none}.toast.show{display:block;animation:pageIn .25s}
+.overlay{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:42px 42px}
+footer{text-align:center;color:#64748b;padding:40px 0 10px;font-size:12px}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.tool-grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.ai-layout{grid-template-columns:1fr}}
+@media(max-width:800px){
+.sidebar{transform:translateX(-100%)}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:10px 15px 50px}
+.mobile-menu{display:block}.topbar{height:58px}.top-actions .hide-mobile{display:none}.hero{padding:24px}.grid{grid-template-columns:1fr}.tool-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:500px){.stats{grid-template-columns:1fr}.hero h2{font-size:34px}.top-actions{gap:5px}.iconbtn{padding:9px}.chat{min-height:520px}.game-board{grid-template-columns:repeat(3,58px)}.cell{width:58px;height:58px}}
+
+/* NOVA 3.0 UPGRADE */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+.kpi{padding:16px;border:1px solid var(--line);border-radius:18px;background:#080e1a}
+.kpi b{font-size:22px;display:block}.kpi span{font-size:11px;color:var(--muted)}
+.pillbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pill{border:1px solid var(--line);background:#080e1a;color:var(--muted);padding:8px 12px;border-radius:999px;font-size:12px;cursor:pointer}.pill.active,.pill:hover{color:var(--text);border-color:rgba(124,92,255,.5);background:rgba(124,92,255,.12)}
+.media-card{position:relative;overflow:hidden}.media-top{display:flex;justify-content:space-between;gap:8px;align-items:center}.rating{font-weight:800;color:#fbbf24}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin:8px 0}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+.cmd-hint{color:var(--muted);font-size:11px;margin-left:auto}.empty{padding:24px;text-align:center;color:var(--muted)}
+.leader{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:11px;border-bottom:1px solid var(--line)}
+.leader:last-child{border-bottom:0}.rank{font-weight:900;width:28px;text-align:center}.score{font-weight:800}
+.flash{animation:flash .35s ease}@keyframes flash{50%{transform:scale(1.05)}}
+@media(max-width:1200px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.kpi-row{grid-template-columns:1fr 1fr}.cmd-hint{display:none}}
+
+
+/* NOVA LOGIN */
+.auth-overlay{position:fixed;inset:0;z-index:9999;display:none;place-items:center;background:rgba(3,5,12,.82);backdrop-filter:blur(16px);padding:20px}
+.auth-overlay.show{display:grid}
+.auth-box{width:min(470px,100%);max-height:92vh;overflow:auto;padding:30px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(145deg,rgba(25,25,45,.97),rgba(10,12,25,.97));box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.auth-logo{font-size:42px;text-align:center;margin-bottom:8px}.auth-box h2{text-align:center;margin:0}.auth-sub{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 22px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.auth-tab{padding:10px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:12px;cursor:pointer}.auth-tab.active{background:rgba(124,92,255,.15);color:var(--text);border-color:rgba(124,92,255,.5)}
+.auth-error{min-height:18px;color:#fb7185;font-size:12px;margin:8px 0}.auth-success{min-height:18px;color:#34d399;font-size:12px;margin:8px 0}
+.auth-links{display:flex;justify-content:flex-end;margin-top:8px}.auth-link{border:0;background:none;color:var(--accent2);font-size:12px;cursor:pointer;padding:4px 0}.auth-link:hover{text-decoration:underline}
+.remember-row{display:flex;align-items:center;gap:8px;margin:4px 0 8px;color:var(--muted);font-size:12px}.remember-row input{accent-color:var(--accent)}
+.recovery-box{margin-top:14px;padding:15px;border:1px solid var(--line);border-radius:16px;background:#080e1a}
+.recovery-hint{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 12px}.recovery-title{font-weight:800;margin-bottom:8px}
+.user-chip{display:flex;align-items:center;gap:8px}.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:13px;font-weight:900}
+.auth-note{font-size:11px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.5}
+/* NOVA_GAME_SCREEN_FINAL */
+.game-area.game-open{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483000 !important;
+  width:100vw !important;
+  height:100vh !important;
+  max-width:none !important;
+  margin:0 !important;
+  border-radius:0 !important;
+  overflow:auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:24px !important;
+}
+.game-area.game-open > *{position:relative;z-index:2147483001}
+.game-close{
+  position:fixed !important;
+  top:18px !important;
+  right:18px !important;
+  z-index:2147483647 !important;
+  pointer-events:auto !important;
+}
+
+
+
+.language-select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:15px;outline:none;cursor:pointer}.language-select:focus{border-color:var(--accent)}
+.shop-search{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
+.shop-search input{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#060b15;color:var(--text);outline:none}
+.shop-search input:focus{border-color:rgba(124,92,255,.55);box-shadow:0 0 0 4px rgba(124,92,255,.08)}
+.shop-stores{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.shop-store{border:1px solid var(--line);background:#070c17;color:var(--text);padding:10px 13px;border-radius:13px;cursor:pointer;transition:.2s}
+.shop-store:hover{transform:translateY(-1px);border-color:rgba(124,92,255,.5);background:#0d1728}
+.shop-store.active{background:linear-gradient(135deg,var(--accent),#5d8cff);color:#fff;border-color:transparent}
+.shop-hint{color:var(--muted);font-size:12px;margin-top:10px}
+@media(max-width:600px){.shop-search{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">N</div><div><h1>Nova Verse</h1><small>AI • Explore • Create</small></div></div>
+  <div class="nav-title">Explore</div>
+  <nav class="nav">
+    <button class="active" data-page="home">🏠 <span>Home</span></button>
+    <button data-page="nova">✦ <span>Nova AI</span></button>
+    <button data-page="search">🔎 <span>Web Search</span></button>
+    <button data-page="games">🎮 <span>Games</span></button>
+    <button data-page="movies">🎬 <span>Movies</span></button>
+    <button data-page="songs">🎵 <span>Songs</span></button>
+    <button data-page="sports">🏆 <span>Sports</span></button>
+    <button data-page="discover">✨ <span>Discover</span></button>
+    <button data-page="leaderboard">🏅 <span>Leaderboard</span></button>
+    <button data-page="health">❤ <span>Health Tools</span></button>
+    <button data-page="education">📚 <span>Education</span></button>
+    <button data-page="islam">☪ <span>Quran & Islam</span></button>
+    <button data-page="shopping">🛍 <span>Shopping & Food</span></button>
+  </nav>
+  <div class="nav-title">Personal</div>
+  <nav class="nav">
+    <button data-page="workspace">📝 <span>Workspace</span></button>
+    <button data-page="favorites">★ <span>Favorites</span></button>
+    <button data-page="settings">⚙ <span>My Profile</span></button>
+    <button data-page="profile">👤 <span>Settings</span></button><button data-page="owner">👑 <span>About Nova</span></button>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="btn primary" style="width:100%" onclick="openCommand()">⌘ Command Center</button>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <button class="iconbtn mobile-menu" onclick="toggleSidebar()">☰</button>
+    <div class="searchbox"><input id="globalSearch" placeholder="Search Nova Verse or press Ctrl + K…" onkeydown="if(event.key==='Enter')globalSearch()"><span>⌕</span></div>
+    <div class="top-actions"><button class="btn" id="authBtn" onclick="openAuth()">🔐 Login</button><span id="authUser"></span>
+      <button class="iconbtn hide-mobile" onclick="toggleTheme()" title="Theme">◐</button>
+      <button class="iconbtn" onclick="openCommand()" title="Command center">⌘</button>
+    </div>
+  </header>
+
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <span class="badge">NOVA VERSE 2.0 • COMPETITION EDITION</span>
+      <h2>Your <span class="gradient">intelligent universe</span> in one page.</h2>
+      <p>Nova Verse brings AI chat, web search, games, learning, health calculators, entertainment, productivity and discovery together in a fast single-file experience.</p>
+      <div class="row">
+        <button class="btn primary" onclick="showPage('nova')">✦ Ask Nova</button>
+        <button class="btn" onclick="showPage('search')">🔎 Search the web</button>
+        <button class="btn" onclick="openCommand()">⌘ Explore everything</button><button class="btn" onclick="showPage('competition')">🏆 Competition Mode</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="statChats">0</b><span>Nova conversations</span></div>
+      <div class="stat"><b id="statFav">0</b><span>Saved favorites</span></div>
+      <div class="stat"><b id="statTasks">0</b><span>Workspace tasks</span></div>
+      <div class="stat"><b>∞</b><span>Ideas to explore</span></div>
+    </div>
+    <div class="section-head"><div><h3>Power modules</h3><p>Everything is connected to the same Nova interface.</p></div></div>
+    <div class="grid" id="moduleGrid"></div>
+
+    <div class="section-head"><div><h3>⚡ Nova Pulse</h3><p>Your live local activity dashboard.</p></div><span class="badge">NOVA 3.0</span></div>
+    <div class="kpi-row">
+      <div class="kpi"><b id="pulseTime">--:--</b><span>Local time</span></div>
+      <div class="kpi"><b id="pulseDate">---</b><span>Today</span></div>
+      <div class="kpi"><b id="pulseSearches">0</b><span>Searches</span></div>
+      <div class="kpi"><b id="pulseFavs">0</b><span>Favorites</span></div>
+      <div class="kpi"><b id="pulseStreak">1</b><span>Nova streak</span></div>
+    </div>
+    <div class="section-head"><div><h3>🧠 Smart Launch</h3><p>Try one of Nova's new shortcuts.</p></div></div>
+    <div class="grid">
+      <div class="card"><div class="bigico">🌐</div><h4>Research Mode</h4><p>Turn a topic into a focused Google research query.</p><button class="btn primary" onclick="researchMode()">Launch research</button></div>
+      <div class="card"><div class="bigico">🎯</div><h4>Daily Challenge</h4><p>Get a random challenge from Nova Arcade.</p><button class="btn primary" onclick="dailyChallenge()">Start challenge</button></div>
+      <div class="card"><div class="bigico">✨</div><h4>Surprise Me</h4><p>Nova chooses something interesting to explore.</p><button class="btn primary" onclick="surpriseMe()">Surprise me</button></div>
+    </div>
+
+    <div class="section-head"><div><h3>Quick launch</h3><p>Jump straight into a tool.</p></div></div>
+    <div class="tool-grid" id="quickGrid"></div>
+  </section>
+
+  <section class="page" id="page-nova">
+    <div class="section-head"><div><h3>✦ Nova AI</h3><p>Ask questions, brainstorm, calculate, explain or search.</p></div><button class="btn" onclick="clearChat()">Clear chat</button></div>
+    <div class="ai-layout">
+      <div class="panel chat">
+        <div class="messages" id="messages"></div>
+        <div class="pillbar" id="aiModes">
+          <button class="pill active" onclick="setAIMode('normal',this)">Normal</button>
+          <button class="pill" onclick="setAIMode('teacher',this)">Teacher</button>
+          <button class="pill" onclick="setAIMode('coder',this)">Coder</button>
+          <button class="pill" onclick="setAIMode('creative',this)">Creative</button>
+        </div>
+        <div class="quick">
+          <button onclick="quickAsk('Explain artificial intelligence simply')">Explain AI</button>
+          <button onclick="quickAsk('Give me 5 coding project ideas')">Coding ideas</button>
+          <button onclick="quickAsk('What can Nova Verse do?')">Nova features</button>
+          <button onclick="quickAsk('Calculate 25 * 48')">Calculate</button>
+        </div>
+        <div class="chat-input"><input id="aiInput" placeholder="Ask Nova anything…" onkeydown="if(event.key==='Enter')sendAI()"><button class="btn" onclick="startVoiceInput()">🎤</button><button class="btn primary" onclick="sendAI()">Send ✦</button></div>
+      </div>
+      <div class="panel">
+        <h3>Nova abilities</h3><p style="color:var(--muted);font-size:13px;line-height:1.6;margin:10px 0">The browser engine can answer common questions locally and can launch Google searches for live information.</p>
+        <div class="result"><b>🧠 Reason</b><p>Explain concepts, summarize and brainstorm.</p></div>
+        <div class="result"><b>➗ Calculate</b><p>Try arithmetic directly in chat.</p></div>
+        <div class="result"><b>🔎 Search</b><p>Use Web Search for current Google results.</p></div>
+        <div class="result"><b>⚡ Commands</b><p>Try “open games”, “dark mode”, or “show workspace”.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-search">
+    <div class="section-head"><div><h3>🔎 Nova Web Search</h3><p>Google-powered discovery from your browser.</p></div></div>
+    <div class="panel">
+      <div class="field"><label>Search query</label><input id="webQuery" placeholder="Ask Google anything…" onkeydown="if(event.key==='Enter')googleSearch()"></div>
+      <div class="row"><button class="btn primary" onclick="googleSearch()">Search Google ↗</button><button class="btn" onclick="luckySearch()">I'm Feeling Lucky ↗</button></div>
+      <div id="searchHistory" style="margin-top:20px"></div>
+    </div>
+    <div class="section-head"><div><h3>Search tips</h3><p>Use precise phrases for stronger results.</p></div></div>
+    <div class="grid">
+      <div class="card"><div class="bigico">📰</div><h4>Latest news</h4><p>Search a topic plus “latest news”.</p></div>
+      <div class="card"><div class="bigico">💻</div><h4>Programming</h4><p>Search error messages, documentation and examples.</p></div>
+      <div class="card"><div class="bigico">🎓</div><h4>Research</h4><p>Search papers, tutorials and educational sources.</p></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-games">
+    <div class="section-head"><div><h3>🎮 Nova Arcade</h3><p>Play, compete and track your best score.</p></div><span class="badge">OFFLINE READY</span></div>
+    <div class="grid">
+      <div class="card"><div class="bigico">⭕</div><h4>Tic-Tac-Toe</h4><p>Classic 3×3 strategy game.</p><button class="btn primary" style="margin-top:13px" onclick="startTicTacToe()">Play now</button></div>
+      <div class="card"><div class="bigico">🧠</div><h4>Memory Challenge</h4><p>Match the hidden emoji pairs.</p><button class="btn primary" style="margin-top:13px" onclick="startMemory()">Play now</button></div>
+      <div class="card"><div class="bigico">⚡</div><h4>Reaction Test</h4><p>Test how quickly you can react.</p><button class="btn primary" style="margin-top:13px" onclick="startReaction()">Play now</button></div>
+      <div class="card"><div class="bigico">🔢</div><h4>Number Guess</h4><p>Find Nova's secret number from 1–100.</p><button class="btn primary" style="margin-top:13px" onclick="startGuess()">Play now</button></div>
+      <div class="card"><div class="bigico">🪨</div><h4>Rock Paper Scissors</h4><p>Challenge Nova in a classic duel.</p><button class="btn primary" style="margin-top:13px" onclick="startRPS()">Play now</button></div>
+      <div class="card"><div class="bigico">➕</div><h4>Speed Math</h4><p>Solve quick equations before time runs out.</p><button class="btn primary" style="margin-top:13px" onclick="startMathGame()">Play now</button></div>
+      <div class="card"><div class="bigico">🎯</div><h4>Target Click</h4><p>Hit the target as many times as possible.</p><button class="btn primary" style="margin-top:13px" onclick="startTarget()">Play now</button></div>
+      <div class="card"><div class="bigico">🟦</div><h4>Color Memory</h4><p>Remember and repeat the sequence.</p><button class="btn primary" style="margin-top:13px" onclick="startSequence()">Play now</button></div>
+
+      <div class="card"><div class="bigico">🧩</div><h4>2048 Mini</h4><p>Merge numbers and chase 2048.</p><button class="btn primary" style="margin-top:13px" onclick="start2048()">Play now</button></div>
+      <div class="card"><div class="bigico">🔤</div><h4>Word Scramble</h4><p>Unscramble the hidden word.</p><button class="btn primary" style="margin-top:13px" onclick="startWordScramble()">Play now</button></div>
+      <div class="card"><div class="bigico">🧠</div><h4>Quick Quiz</h4><p>Answer 10 general knowledge questions.</p><button class="btn primary" style="margin-top:13px" onclick="startQuiz()">Play now</button></div>
+      <div class="card"><div class="bigico">🪙</div><h4>Coin Flip Streak</h4><p>How long can your streak survive?</p><button class="btn primary" style="margin-top:13px" onclick="startCoin()">Play now</button></div>
+
+    </div>
+    <div class="panel game-area" id="gameArea" style="margin-top:15px"><div><div style="font-size:45px">🕹️</div><h3>Choose a game</h3><p style="color:var(--muted);margin:7px">Your game will appear here.</p></div></div>
+  <button class="game-close" id="gameClose" type="button" onclick="closeGameScreen()" aria-label="Close game" style="display:none">✕</button>
+  </section>
+
+<section class="page" id="page-movies">
+    <div class="section-head"><div><h3>🎬 Nova Cinema</h3><p>Explore 50+ movies, trailers, cast, reviews and watch searches.</p></div></div>
+    <div class="panel"><div class="field"><label>Find a movie</label><input id="movieQ" placeholder="Movie, actor or genre…" oninput="filterCards('movieQ','movieGrid')"></div><div class="row" style="margin-top:10px"><button class="btn" onclick="googleSearch('best movies 2026')">🔥 Trending</button><button class="btn" onclick="googleSearch('best action movies')">💥 Action</button><button class="btn" onclick="googleSearch('best sci fi movies')">🚀 Sci-Fi</button><button class="btn" onclick="googleSearch('best comedy movies')">😂 Comedy</button></div></div>
+    <div class="grid" id="movieGrid" style="margin-top:15px"></div>
+  </section>
+
+  <section class="page" id="page-songs">
+    <div class="section-head"><div><h3>🎵 Nova Music Hub</h3><p>Explore 50+ songs, artists, videos, lyrics and albums.</p></div></div>
+    <div class="panel"><div class="field"><label>Find music</label><input id="songQ" placeholder="Song or artist…" oninput="filterCards('songQ','songGrid')"></div><div class="row" style="margin-top:10px"><button class="btn" onclick="googleSearch('top songs 2026')">🔥 Trending</button><button class="btn" onclick="googleSearch('best pop songs')">🎤 Pop</button><button class="btn" onclick="googleSearch('best Arabic songs')">🌙 Arabic</button><button class="btn" onclick="googleSearch('best rap songs')">🎧 Rap</button></div></div>
+    <div class="grid" id="songGrid" style="margin-top:15px"></div>
+  </section>
+
+  <section class="page" id="page-sports">
+    <div class="section-head"><div><h3>🏆 Sports Center</h3><p>Open live searches for scores, schedules and news.</p></div></div>
+    <div class="grid" id="sportsGrid"></div>
+
+    <div class="panel" style="margin-top:15px">
+      <h3>⚡ Sports Quick Search</h3>
+      <div class="pillbar">
+        <button class="pill" onclick="googleSearch('football live scores')">Football Live</button>
+        <button class="pill" onclick="googleSearch('Saudi Pro League fixtures')">Saudi League</button>
+        <button class="pill" onclick="googleSearch('NBA scores today')">NBA</button>
+        <button class="pill" onclick="googleSearch('Formula 1 latest')">F1</button>
+        <button class="pill" onclick="googleSearch('tennis live scores')">Tennis</button>
+        <button class="pill" onclick="googleSearch('cricket live scores')">Cricket</button>
+      </div>
+      <div class="field"><label>Search a team, player, league or event</label><input id="sportQ" placeholder="e.g. Al Hilal, Real Madrid, Lakers..." onkeydown="if(event.key==='Enter')googleSearch(this.value+' sports')"></div>
+      <button class="btn primary" onclick="googleSearch(($('sportQ').value||'latest sports')+' sports')">Search ↗</button>
+    </div>
+  </section>
+
+  <section class="page" id="page-health">
+    <div class="section-head"><div><h3>❤ Health Lab</h3><p>Educational calculators — not medical diagnosis.</p></div></div>
+    <div class="grid">
+      <div class="panel"><h3>BMI Calculator</h3><div class="field" style="margin-top:15px"><label>Age</label><input id="bmiAge" type="number" value="20" min="2" max="120"></div><div class="field"><label>Weight (kg)</label><input id="bmiW" type="number" value="70" min="1" step="0.1"></div><div class="field"><label>Height (cm)</label><input id="bmiH" type="number" value="175" min="50" max="250" step="0.1"></div><button class="btn primary" onclick="calcBMI()">Calculate</button><div id="bmiOut" class="result"></div></div>
+      <div class="panel"><h3>Water Guide</h3><div class="field" style="margin-top:15px"><label>Weight (kg)</label><input id="waterW" type="number" value="70"></div><button class="btn primary" onclick="calcWater()">Estimate</button><div id="waterOut" class="result"></div></div>
+      <div class="panel"><h3>Heart Rate Zones</h3><div class="field" style="margin-top:15px"><label>Age</label><input id="age" type="number" value="20"></div><button class="btn primary" onclick="calcHR()">Calculate</button><div id="hrOut" class="result"></div></div>
+      <div class="panel"><h3>Calories Burned</h3><div class="field" style="margin-top:15px"><label>Weight (kg)</label><input id="calW" type="number" value="70"></div><div class="field"><label>Exercise minutes</label><input id="calM" type="number" value="30"></div><div class="field"><label>Intensity</label><select id="calI"><option value="5">Walking / light</option><option value="7">Moderate</option><option value="10">Hard</option><option value="12">Very hard</option></select></div><button class="btn primary" onclick="calcCalories()">Estimate</button><div id="calOut" class="result"></div></div>
+      <div class="panel"><h3>Body Fat Estimate</h3><div class="field" style="margin-top:15px"><label>Age</label><input id="bfAge" type="number" value="20"></div><div class="field"><label>Sex</label><select id="bfSex"><option value="1">Male</option><option value="0">Female</option></select></div><div class="field"><label>BMI</label><input id="bfBMI" type="number" value="22.9" step=".1"></div><button class="btn primary" onclick="calcBodyFat()">Estimate</button><div id="bfOut" class="result"></div></div>
+      <div class="panel"><h3>Sleep Planner</h3><div class="field" style="margin-top:15px"><label>Wake-up time</label><input id="wakeTime" type="time" value="07:00"></div><button class="btn primary" onclick="calcSleep()">Find bedtimes</button><div id="sleepOut" class="result"></div></div>
+      <div class="panel"><h3>Ideal Weight Range</h3><div class="field" style="margin-top:15px"><label>Height (cm)</label><input id="iwH" type="number" value="175"></div><button class="btn primary" onclick="calcIdealWeight()">Estimate</button><div id="iwOut" class="result"></div></div>
+      <div class="panel"><h3>Running Pace</h3><div class="field" style="margin-top:15px"><label>Distance (km)</label><input id="paceD" type="number" value="5" step=".1"></div><div class="field"><label>Time (minutes)</label><input id="paceT" type="number" value="30"></div><button class="btn primary" onclick="calcPace()">Calculate</button><div id="paceOut" class="result"></div></div>
+      
+            <div class="panel"><h3>🎯 Target Heart Zone</h3><div class="field" style="margin-top:15px"><label>Age</label><input id="tzAge" type="number" value="20"></div><div class="field"><label>Resting heart rate</label><input id="tzRest" type="number" value="65"></div><button class="btn primary" onclick="calcTargetZone()">Calculate</button><div id="tzOut" class="result"></div></div>
+            <div class="panel"><h3>🔥 Daily Calorie Guide</h3><div class="field" style="margin-top:15px"><label>Weight (kg)</label><input id="dcW" type="number" value="70"></div><div class="field"><label>Height (cm)</label><input id="dcH" type="number" value="175"></div><div class="field"><label>Age</label><input id="dcA" type="number" value="20"></div><div class="field"><label>Activity</label><select id="dcAct"><option value="1.2">Low</option><option value="1.375">Light</option><option value="1.55" selected>Moderate</option><option value="1.725">High</option></select></div><button class="btn primary" onclick="calcDailyCalories()">Estimate</button><div id="dcOut" class="result"></div></div>
+            <div class="panel"><h3>💧 Hydration Reminder</h3><div class="field" style="margin-top:15px"><label>Reminder interval (minutes)</label><input id="hydrationM" type="number" value="60"></div><button class="btn primary" onclick="startHydration()">Start reminder</button><div id="hydrationOut" class="result">No reminder running.</div></div>
+            <div class="panel"><h3>🧘 Breathing Timer</h3><p style="color:var(--muted);font-size:13px;margin:10px 0">Simple 4–4 breathing cycle for relaxation.</p><div id="breathOut" class="result" style="font-size:20px;text-align:center">Ready</div><button class="btn primary" onclick="startBreathing()">Start 1 minute</button></div>
+      
+    </div>
+    <div class="grid" style="margin-top:15px">
+      <div class="panel"><h3>Fitness Readiness</h3><p style="color:var(--muted);font-size:13px;line-height:1.6;margin:10px 0">A simple self-check, not a medical test.</p><div class="field"><label>Sleep hours</label><input id="readySleep" type="number" value="7"></div><div class="field"><label>Energy 1–10</label><input id="readyEnergy" type="number" value="7" min="1" max="10"></div><div class="field"><label>Soreness 1–10</label><input id="readySore" type="number" value="3" min="1" max="10"></div><button class="btn primary" onclick="calcReadiness()">Check</button><div id="readyOut" class="result"></div></div>
+      <div class="panel"><h3>Health Checklist</h3><p style="color:var(--muted);font-size:13px;line-height:1.6;margin:10px 0">Tap items as a daily reminder.</p><div id="healthChecklist"></div></div>
+      <div class="panel"><h3>Nutrition Basics</h3><p style="color:var(--muted);line-height:1.7;font-size:13px">Build meals around vegetables and fruit, protein foods, whole grains and healthy fats. Hydration, sleep and regular movement also matter.</p><button class="btn" style="margin-top:12px" onclick="googleSearch('healthy nutrition guidelines')">Research ↗</button></div>
+    </div>
+    <div class="card" style="margin-top:15px"><b>Important:</b> These are educational estimates only. They are not diagnosis, treatment or personalized medical advice. For medical concerns, use qualified healthcare professionals.</div>
+  </section>
+
+  <section class="page" id="page-education">
+    <div class="section-head"><div><h3>📚 Nova Academy</h3><p>Learn faster with topic launchers.</p></div></div>
+    <div class="grid" id="educationGrid"></div>
+  </section>
+
+  <section class="page" id="page-islam">
+    <div class="section-head"><div><h3>☪ Quran & Islam</h3><p>Open trusted searches for Quran, Hadith and Islamic studies.</p></div></div>
+    <div class="grid" id="islamGrid"></div>
+  </section>
+
+  <section class="page" id="page-shopping">
+    <div class="section-head"><div><h3>🛍 Shopping & Food</h3><p>Search products directly on Amazon, Haraj and other destinations.</p></div></div>
+    <div class="panel">
+      <div class="shop-search">
+        <div class="field" style="margin:0">
+          <label>What do you want to search for?</label>
+          <input id="shopSearch" placeholder="e.g. gaming laptop, headphones, shoes…" onkeydown="if(event.key==='Enter')shopSearchActive()">
+        </div>
+        <button class="btn primary" onclick="shopSearchActive()">Search ↗</button>
+      </div>
+      <div class="shop-stores" id="shopStores"></div>
+      <p class="shop-hint">Choose a store, type your product, then press Search. Each store opens its own search results.</p>
+    </div>
+    <div class="grid" id="shopGrid" style="margin-top:15px"></div>
+  </section>
+
+  <section class="page" id="page-workspace">
+    <div class="section-head"><div><h3>📝 Nova Workspace</h3><p>Your private browser-based mini productivity center.</p></div></div>
+    <div class="grid">
+      <div class="panel"><h3>Tasks</h3><div class="todo" style="margin:15px 0"><input id="taskInput" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTask()"><button class="btn primary" onclick="addTask()">Add</button></div><div id="tasks"></div></div>
+      <div class="panel"><h3>Quick Notes</h3><div class="field" style="margin-top:15px"><textarea id="notes" placeholder="Write your ideas…"></textarea></div><button class="btn primary" onclick="saveNotes()">Save notes</button><span id="noteStatus" style="color:var(--good);font-size:12px;margin-left:8px"></span></div>
+      <div class="panel"><h3>Focus Timer</h3><div style="font-size:54px;text-align:center;margin:30px 0" id="timer">25:00</div><div class="row" style="justify-content:center"><button class="btn primary" onclick="startTimer()">Start</button><button class="btn" onclick="pauseTimer()">Pause</button><button class="btn" onclick="resetTimer()">Reset</button></div></div>
+      <div class="panel"><h3>⚡ Nova Quick Desk</h3><p style="color:var(--muted);line-height:1.6;margin:10px 0 15px">Keep your productivity tools here instead of Settings.</p><div class="row"><button class="btn primary" onclick="openCommand()">⌘ Command Center</button><button class="btn" onclick="showPage('profile')">👤 Profile</button><button class="btn" onclick="showPage('academy')">📚 Academy</button></div></div>
+      <div class="panel"><h3>💡 Idea Lab</h3><div class="field" style="margin-top:12px"><textarea id="ideaLab" placeholder="Plan your next Nova feature, coding project or competition idea…"></textarea></div><button class="btn primary" onclick="saveIdeaLab()">Save idea</button><span id="ideaStatus" style="color:var(--good);font-size:12px;margin-left:8px"></span></div>
+      <div class="panel"><h3>🎯 Project Planner</h3><p style="color:var(--muted);line-height:1.6;margin:10px 0">Use tasks for your Coding Week checklist.</p><div class="pillbar"><button class="pill" onclick="addTaskFromPreset('Build AI demo')">🤖 AI demo</button><button class="pill" onclick="addTaskFromPreset('Improve Education')">📚 Education</button><button class="pill" onclick="addTaskFromPreset('Test Health Lab')">❤ Health</button><button class="pill" onclick="addTaskFromPreset('Polish UI')">✨ UI polish</button></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-favorites">
+    <div class="section-head"><div><h3>★ Favorites</h3><p>Save things you want to find again.</p></div></div>
+    <div class="panel" id="favoritesList"></div>
+  </section>
+
+  <section class="page" id="page-settings">
+    <div class="section-head"><div><h3>⚙ Settings</h3><p>Only interface, language, data and shortcut controls live here.</p></div></div>
+    <div class="grid">
+      <div class="panel"><h3>Appearance</h3><p style="color:var(--muted);margin:10px 0 15px">Switch the interface style.</p><button class="btn primary" onclick="toggleTheme()">Toggle theme</button></div>
+      <div class="panel"><h3>🌐 Language</h3><p style="color:var(--muted);margin:10px 0 15px">Choose Nova Verse interface language.</p><select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)"><option value="en">🇬🇧 English</option><option value="ar">🇸🇦 العربية</option><option value="ur">🇵🇰 اردو</option><option value="hi">🇮🇳 हिन्दी</option><option value="es">🇪🇸 Español</option><option value="fr">🇫🇷 Français</option></select></div>
+      <div class="panel"><h3>Data</h3><p style="color:var(--muted);margin:10px 0 15px">Your demo data is stored in this browser only.</p><button class="btn danger" onclick="resetNova()">Reset local data</button></div>
+      <div class="panel"><h3>Keyboard shortcuts</h3><p style="color:var(--muted);line-height:1.8;margin-top:10px">Ctrl/⌘ + K — Command Center<br>Ctrl/⌘ + / — Search<br>Esc — Close panels</p></div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-discover">
+    <div class="section-head"><div><h3>✨ Nova Discover</h3><p>One-click discovery across technology, science, gaming, travel and culture.</p></div></div>
+    <div class="panel">
+      <div class="field"><label>What are you curious about?</label><input id="discoverQ" placeholder="e.g. future of robotics"></div>
+      <div class="pillbar">
+        <button class="pill" onclick="discoverPreset('AI breakthroughs')">🤖 AI</button>
+        <button class="pill" onclick="discoverPreset('space discoveries')">🚀 Space</button>
+        <button class="pill" onclick="discoverPreset('gaming news')">🎮 Gaming</button>
+        <button class="pill" onclick="discoverPreset('technology news')">💻 Tech</button>
+        <button class="pill" onclick="discoverPreset('travel ideas')">✈️ Travel</button>
+        <button class="pill" onclick="discoverPreset('science facts')">🔬 Science</button>
+      </div>
+      <button class="btn primary" onclick="discoverSearch()">Explore Google ↗</button>
+    </div>
+    <div class="section-head"><div><h3>Trending ideas</h3><p>Pick a direction and keep exploring.</p></div></div>
+    <div class="grid" id="discoverGrid"></div>
+  </section>
+
+  <section class="page" id="page-leaderboard">
+    <div class="section-head"><div><h3>🏅 Nova Leaderboard</h3><p>Local personal records and arcade achievements.</p></div></div>
+    <div class="grid">
+      <div class="panel">
+        <h3>🏆 Personal Records</h3>
+        <div id="records"></div>
+      </div>
+      <div class="panel">
+        <h3>🎖 Achievements</h3>
+        <div id="achievements"></div>
+      </div>
+      <div class="panel">
+        <h3>📈 Nova Level</h3>
+        <div style="font-size:44px;font-weight:900;margin:18px 0" id="novaLevel">1</div>
+        <div class="progress"><i id="levelProgress"></i></div>
+        <p id="levelText" style="color:var(--muted);font-size:13px">Complete activities to level up.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-profile">
+    <div class="section-head"><div><h3>👤 My Nova Profile</h3><p>Your personal Nova progress dashboard.</p></div></div>
+    <div class="grid">
+      <div class="hero"><span class="badge">NOVA MEMBER</span><h2>Welcome, <span class="gradient" id="profileName">Guest</span>!</h2><p>Track your XP, streak, activities and achievements in one place.</p><div class="row"><button class="btn primary" onclick="showPage('academy')">📚 Start learning</button><button class="btn" onclick="dailyChallenge()">🎯 Daily challenge</button></div></div>
+      <div class="panel"><h3>⭐ Nova XP</h3><div style="font-size:48px;font-weight:900;margin:14px 0" id="profileXP">0</div><div class="progress"><i id="profileProgress"></i></div><p id="profileLevelText" style="color:var(--muted);margin-top:10px"></p></div>
+      <div class="panel"><h3>📊 Activity</h3><div class="result">💬 Chats: <b id="profileChats">0</b></div><div class="result">🔎 Searches: <b id="profileSearches">0</b></div><div class="result">🏆 Streak: <b id="profileStreak">1</b> days</div><div class="result">★ Favorites: <b id="profileFavs">0</b></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-academy">
+    <div class="section-head"><div><h3>📚 Nova Academy</h3><p>Interactive learning with quizzes, flashcards and study tools.</p></div></div>
+    <div class="grid">
+      <div class="panel"><h3>🧠 Quick Quiz</h3><p id="quizQuestion" style="font-size:18px;margin:15px 0">Press start to begin.</p><div id="quizOptions" class="grid" style="grid-template-columns:1fr 1fr"></div><button class="btn primary" onclick="startAcademyQuiz()" style="margin-top:15px">Start / Restart Quiz</button><div id="quizScore" class="result"></div></div>
+      <div class="panel"><h3>🗂 Flashcards</h3><div id="flashcard" class="result" style="min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px">Click reveal to study.</div><div class="row"><button class="btn" onclick="nextFlashcard()">Next card</button><button class="btn primary" onclick="revealFlashcard()">Reveal</button></div></div>
+      <div class="panel"><h3>⏱ Study Sprint</h3><p style="color:var(--muted);margin:10px 0">Use the Workspace focus timer for a distraction-free study session.</p><button class="btn primary" onclick="showPage('workspace');startTimer()">Start 25-minute sprint</button></div>
+      <div class="panel"><h3>🔎 Research with Nova</h3><p style="color:var(--muted);margin:10px 0">Search Google for a topic and turn it into a study session.</p><button class="btn primary" onclick="researchMode()">Research a topic</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-competition">
+    <div class="hero"><span class="badge">🏆 COMPETITION MODE</span><h2>Nova Verse <span class="gradient">Command Center</span></h2><p>A live showcase of AI, search, learning, health, productivity, games and personalization.</p><div class="row"><button class="btn primary" onclick="showPage('nova')">✦ Nova AI</button><button class="btn" onclick="startVoiceInput()">🎤 Voice Nova</button><button class="btn" onclick="showPage('academy')">📚 Academy</button></div></div>
+    <div class="section-head"><div><h3>⚡ Live showcase</h3><p>Use these buttons during your Coding Week demo.</p></div></div>
+    <div class="grid">
+      <div class="card"><div class="bigico">🤖</div><h4>AI Assistant</h4><p>Chat, explain, calculate and control Nova.</p><button class="btn primary" onclick="showPage('nova')">Demo AI</button></div>
+      <div class="card"><div class="bigico">🌐</div><h4>Google Research</h4><p>Launch live searches from inside Nova.</p><button class="btn primary" onclick="researchMode()">Demo Search</button></div>
+      <div class="card"><div class="bigico">📚</div><h4>Interactive Learning</h4><p>Quiz and flashcards with XP rewards.</p><button class="btn primary" onclick="showPage('academy');startAcademyQuiz()">Demo Quiz</button></div>
+      <div class="card"><div class="bigico">❤️</div><h4>Health Lab</h4><p>BMI with age plus educational health tools.</p><button class="btn primary" onclick="showPage('health')">Demo Health</button></div>
+      <div class="card"><div class="bigico">🏆</div><h4>Gamification</h4><p>XP, levels, streaks and achievements.</p><button class="btn primary" onclick="showPage('leaderboard')">Demo Progress</button></div>
+      <div class="card"><div class="bigico">🌍</div><h4>Multilingual</h4><p>Switch the interface between six languages.</p><button class="btn primary" onclick="showPage('settings')">Change language</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-owner">
+    <div class="hero"><span class="badge">CREATOR PROFILE</span><h2>Create by <span class="gradient">Abdullah Ateeq</span>.</h2><p>Nova Verse is a single-file experiment designed to show how one web page can become a complete digital universe: AI, search, games, learning, tools and productivity.</p><div class="row"><button class="btn primary" onclick="showPage('nova')">Talk to Nova</button><button class="btn" onclick="showPage('workspace')">Open Workspace</button></div></div>
+    <div class="grid" style="margin-top:15px"><div class="card"><div class="bigico">🚀</div><h4>Vision</h4><p>One beautiful starting point for exploring the web and creating ideas.</p></div><div class="card"><div class="bigico">🧩</div><h4>Architecture</h4><p>Single HTML file with embedded CSS and JavaScript for easy portability.</p></div><div class="card"><div class="bigico">🏅</div><h4>Competition Mode</h4><p>Fast demos, polished UI, useful modules and keyboard-friendly controls.</p></div></div>
+  </section>
+
+  <footer>Nova Verse • Create as a single-file web application • Educational features are for demonstration.</footer>
+</main>
+</div>
+
+<div class="modal" id="commandModal" onclick="if(event.target===this)closeCommand()">
+  <div class="modalbox">
+    <div class="section-head" style="margin:0 0 10px"><div><h3>⌘ Nova Command Center</h3><p>Jump anywhere instantly.</p></div><button class="iconbtn" onclick="closeCommand()">✕</button></div>
+    <div class="field"><input id="commandInput" placeholder="Type a page or command…" oninput="renderCommands()"></div>
+    <div id="commands"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* NOVA LANGUAGE SYSTEM */
+const NOVA_LANGS={
+ en:{dir:'ltr',nav:['Home','Nova AI','Web Search','Games','Movies','Songs','Sports','Discover','Leaderboard','Health Tools','Education','Quran & Islam','Shopping & Food','Workspace','Favorites','Settings','My Profile','About Nova'],settings:'Settings',language:'Language',languageHelp:'Choose Nova Verse interface language.',appearance:'Appearance',data:'Data',shortcuts:'Keyboard shortcuts',toggle:'Toggle theme',reset:'Reset local data',search:'Search Nova Verse or press Ctrl + K…',online:'AI • Explore • Create'},
+ ar:{dir:'rtl',nav:['الرئيسية','نوفا AI','بحث الويب','الألعاب','الأفلام','الأغاني','الرياضة','اكتشف','المتصدرون','أدوات الصحة','التعليم','القرآن والإسلام','التسوق والطعام','مساحة العمل','المفضلة','الإعدادات','عن نوفا'],settings:'الإعدادات',language:'اللغة',languageHelp:'اختر لغة واجهة نوفا فيرس.',appearance:'المظهر',data:'البيانات',shortcuts:'اختصارات لوحة المفاتيح',toggle:'تغيير المظهر',reset:'إعادة ضبط البيانات',search:'ابحث في نوفا فيرس أو اضغط Ctrl + K…',online:'ذكاء اصطناعي • استكشف • أنشئ'},
+ ur:{dir:'rtl',nav:['ہوم','نووا AI','ویب سرچ','گیمز','فلمیں','گانے','کھیل','دریافت','لیڈر بورڈ','صحت کے ٹولز','تعلیم','قرآن و اسلام','خریداری و کھانا','ورک اسپیس','پسندیدہ','میرا پروفائل','سیٹنگز','نووا کے بارے میں'],settings:'سیٹنگز',language:'زبان',languageHelp:'نووا ورس کی زبان منتخب کریں۔',appearance:'ظاہری شکل',data:'ڈیٹا',shortcuts:'کی بورڈ شارٹ کٹس',toggle:'تھیم تبدیل کریں',reset:'مقامی ڈیٹا ری سیٹ کریں',search:'نووا ورس میں تلاش کریں یا Ctrl + K دبائیں…',online:'AI • دریافت • تخلیق'},
+ hi:{dir:'ltr',nav:['होम','नोवा AI','वेब सर्च','गेम्स','फिल्में','गाने','स्पोर्ट्स','डिस्कवर','लीडरबोर्ड','हेल्थ टूल्स','शिक्षा','कुरान और इस्लाम','शॉपिंग और फूड','वर्कस्पेस','पसंदीदा','मेरा प्रोफ़ाइल','सेटिंग्स','नोवा के बारे में'],settings:'सेटिंग्स',language:'भाषा',languageHelp:'नोवा वर्स की इंटरफेस भाषा चुनें।',appearance:'दिखावट',data:'डेटा',shortcuts:'कीबोर्ड शॉर्टकट',toggle:'थीम बदलें',reset:'लोकल डेटा रीसेट करें',search:'नोवा वर्स में खोजें या Ctrl + K दबाएँ…',online:'AI • एक्सप्लोर • क्रिएट'},
+ es:{dir:'ltr',nav:['Inicio','Nova AI','Búsqueda web','Juegos','Películas','Canciones','Deportes','Descubrir','Clasificación','Herramientas de salud','Educación','Corán e Islam','Compras y comida','Espacio de trabajo','Favoritos','Settings','Mi perfil','Sobre Nova'],settings:'Ajustes',language:'Idioma',languageHelp:'Elige el idioma de la interfaz de Nova Verse.',appearance:'Apariencia',data:'Datos',shortcuts:'Atajos de teclado',toggle:'Cambiar tema',reset:'Restablecer datos',search:'Busca en Nova Verse o pulsa Ctrl + K…',online:'IA • Explora • Crea'},
+ fr:{dir:'ltr',nav:['Accueil','Nova AI','Recherche web','Jeux','Films','Chansons','Sports','Découvrir','Classement','Outils santé','Éducation','Coran et Islam','Shopping et nourriture','Espace de travail','Favoris','Settings','Mon profil','À propos de Nova'],settings:'Paramètres',language:'Langue',languageHelp:'Choisissez la langue de l’interface Nova Verse.',appearance:'Apparence',data:'Données',shortcuts:'Raccourcis clavier',toggle:'Changer le thème',reset:'Réinitialiser les données',search:'Rechercher dans Nova Verse ou appuyez sur Ctrl + K…',online:'IA • Explore • Crée'}
+};
+function changeLanguage(lang){
+ const d=NOVA_LANGS[lang]||NOVA_LANGS.en;
+ localStorage.setItem('nova_language',lang);
+ document.documentElement.lang=lang;
+ document.documentElement.dir=d.dir;
+ const navs=document.querySelectorAll('.nav button span');
+ d.nav.forEach((txt,i)=>{if(navs[i])navs[i].textContent=txt});
+ const settingsPage=document.getElementById('page-settings');
+ if(settingsPage){
+   const heads=settingsPage.querySelectorAll('.panel h3');
+   const ps=settingsPage.querySelectorAll('.panel p');
+   if(heads[0])heads[0].textContent=d.appearance;
+   if(ps[0])ps[0].textContent=lang==='en'?'Switch the interface style.':d.toggle;
+   if(heads[1])heads[1].textContent=d.language;
+   if(ps[1])ps[1].textContent=d.languageHelp;
+   if(heads[2])heads[2].textContent=d.data;
+   if(heads[3])heads[3].textContent=d.shortcuts;
+   const theme=settingsPage.querySelectorAll('.panel button.btn.primary')[0];
+   const reset=settingsPage.querySelector('.btn.danger');
+   if(theme)theme.textContent=d.toggle;
+   if(reset)reset.textContent=d.reset;
+ }
+ const gs=document.getElementById('globalSearch'); if(gs)gs.placeholder=d.search;
+ const select=document.getElementById('languageSelect'); if(select)select.value=lang;
+ const sideTitle=document.querySelector('.brand small'); if(sideTitle)sideTitle.textContent=d.online;
+ if(typeof toast==='function')toast('Language: '+(select?select.options[select.selectedIndex].text:lang));
+}
+function initLanguage(){changeLanguage(localStorage.getItem('nova_language')||'en')}
+
+/* NOVA LOCAL AUTH — username + email + remember me + password recovery */
+let authMode='login';
+
+function getUsers(){
+  try{return JSON.parse(localStorage.getItem('nova_users')||'{}')}
+  catch(e){return {}}
+}
+
+function normalizeUsername(v){return String(v||'').trim().toLowerCase()}
+function normalizeEmail(v){return String(v||'').trim().toLowerCase()}
+
+function getCurrentUser(){
+  return localStorage.getItem('nova_current_user') ||
+         sessionStorage.getItem('nova_current_user') || '';
+}
+
+function setCurrentUser(username,remember){
+  localStorage.removeItem('nova_current_user');
+  sessionStorage.removeItem('nova_current_user');
+  if(remember) localStorage.setItem('nova_current_user',username);
+  else sessionStorage.setItem('nova_current_user',username);
+}
+
+function findUser(loginValue){
+  const users=getUsers();
+  const value=normalizeUsername(loginValue);
+  if(!value)return null;
+
+  if(users[value]) return {key:value,user:users[value]};
+
+  for(const key of Object.keys(users)){
+    const u=users[key]||{};
+    if(normalizeUsername(u.username||key)===value ||
+       normalizeEmail(u.email||'')===normalizeEmail(loginValue)){
+      return {key,user:u};
+    }
+  }
+  return null;
+}
+
+function authTab(mode){
+  authMode=mode;
+  $('loginTab').classList.toggle('active',mode==='login');
+  $('signupTab').classList.toggle('active',mode==='signup');
+  $('authConfirmWrap').style.display=mode==='signup'?'block':'none';
+  $('authEmailWrap').style.display=mode==='signup'?'block':'none';
+  $('authUsernameLabel').textContent=mode==='signup'?'Username':'Username or Email';
+  $('authEmail').placeholder=mode==='signup'?'Choose a username':'Enter your username or email';
+  $('authSubmit').textContent=mode==='signup'?'Create Nova account':'Login to Nova';
+  $('forgotLink').style.display=mode==='login'?'block':'none';
+  $('authError').textContent='';
+  $('authSuccess').textContent='';
+}
+
+function openAuth(){
+  $('authOverlay').classList.add('show');
+  authTab('login');
+  const u=getCurrentUser();
+  if(u)$('authEmail').value=u;
+  $('rememberMe').checked=localStorage.getItem('nova_remember_me')==='1';
+  setTimeout(()=>$('authEmail').focus(),50);
+}
+
+function closeAuth(){$('authOverlay').classList.remove('show')}
+
+function submitAuth(){
+  if(authMode==='forgot')return startPasswordRecovery();
+
+  const loginValue=$('authEmail').value.trim();
+  const pass=$('authPass').value;
+  const confirm=$('authConfirm').value;
+  const email=normalizeEmail($('authSignupEmail').value);
+  const remember=$('rememberMe').checked;
+
+  $('authError').className='auth-error';
+  $('authError').textContent='';
+  $('authSuccess').textContent='';
+
+  if(!loginValue||!pass){
+    $('authError').textContent='Please enter your username/email and password.';
+    return;
+  }
+
+  const users=getUsers();
+
+  if(authMode==='signup'){
+    const username=normalizeUsername(loginValue);
+
+    if(!/^[a-z0-9_.-]{3,24}$/i.test(username)){
+      $('authError').textContent='Username must be 3–24 characters and use letters, numbers, _, . or -.';
+      return;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      $('authError').textContent='Please enter a valid email address.';
+      return;
+    }
+    if(pass.length<6){
+      $('authError').textContent='Password must be at least 6 characters.';
+      return;
+    }
+    if(pass!==confirm){
+      $('authError').textContent='Passwords do not match.';
+      return;
+    }
+    if(users[username]){
+      $('authError').textContent='That username already exists. Try another one.';
+      return;
+    }
+
+    for(const key of Object.keys(users)){
+      if(normalizeEmail(users[key]?.email||'')===email){
+        $('authError').textContent='That email is already registered.';
+        return;
+      }
+    }
+
+    users[username]={
+      username,
+      email,
+      password:pass,
+      created:new Date().toISOString()
+    };
+    localStorage.setItem('nova_users',JSON.stringify(users));
+    localStorage.setItem('nova_remember_me',remember?'1':'0');
+    setCurrentUser(username,remember);
+    closeAuth();
+    updateAuthUI();
+    toast('Account created — welcome to Nova! 🚀');
+    return;
+  }
+
+  const found=findUser(loginValue);
+  if(!found){
+    $('authError').textContent='Account not found. Check your username/email or create an account.';
+    return;
+  }
+  if(found.user.password!==pass){
+    $('authError').textContent='Incorrect password.';
+    return;
+  }
+
+  const username=found.user.username||found.key;
+  localStorage.setItem('nova_remember_me',remember?'1':'0');
+  setCurrentUser(username,remember);
+  closeAuth();
+  updateAuthUI();
+  toast('Welcome back to Nova! 👋');
+}
+
+function showForgotPassword(){
+  authMode='forgot';
+  $('loginTab').classList.remove('active');
+  $('signupTab').classList.remove('active');
+  $('authConfirmWrap').style.display='none';
+  $('authEmailWrap').style.display='none';
+  $('authPassWrap').style.display='none';
+  $('rememberWrap').style.display='none';
+  $('forgotLink').style.display='none';
+  $('authUsernameLabel').textContent='Username verification';
+  $('authEmail').placeholder='Enter the username you created before';
+  $('authEmail').value='';
+  $('authSubmit').textContent='Verify Username';
+  $('authError').textContent='';
+  $('authSuccess').textContent='';
+  $('authRecovery').style.display='none';
+  $('authBack').style.display='block';
+  setTimeout(()=>$('authEmail').focus(),50);
+}
+
+function backToLogin(){
+  $('authRecovery').style.display='none';
+  $('authBack').style.display='none';
+  $('authPassWrap').style.display='block';
+  $('rememberWrap').style.display='flex';
+  authTab('login');
+}
+
+function startPasswordRecovery(){
+  const username=normalizeUsername($('authEmail').value);
+  const found=findUser(username);
+
+  $('authError').textContent='';
+  $('authSuccess').textContent='';
+
+  if(!found || normalizeUsername(found.user.username||found.key)!==username){
+    $('authError').textContent='Username not found. Enter the username you used when creating the account.';
+    return;
+  }
+
+  const registeredEmail=normalizeEmail(found.user.email||'');
+  if(!registeredEmail){
+    $('authError').textContent='This account does not have a recovery email. Please create a new account.';
+    return;
+  }
+
+  $('recoveryUsername').value=found.user.username||found.key;
+  $('recoveryHint').textContent='Recovery email on this account: '+maskEmail(registeredEmail);
+  $('recoveryEmail').value='';
+  $('newPassword').value='';
+  $('newPasswordConfirm').value='';
+  $('authRecovery').style.display='block';
+  $('authSubmit').style.display='none';
+  $('authError').textContent='';
+  $('authSuccess').textContent='Username verified ✓ Now confirm your registered email.';
+}
+
+function maskEmail(email){
+  const [name,domain]=email.split('@');
+  if(!domain)return email;
+  const shown=name.length<=2?name.charAt(0)+'*':name.charAt(0)+'***'+name.charAt(name.length-1);
+  return shown+'@'+domain;
+}
+
+function resetPassword(){
+  const username=normalizeUsername($('recoveryUsername').value);
+  const email=normalizeEmail($('recoveryEmail').value);
+  const pass=$('newPassword').value;
+  const confirm=$('newPasswordConfirm').value;
+  const users=getUsers();
+  const found=findUser(username);
+
+  $('authError').textContent='';
+  $('authSuccess').textContent='';
+
+  if(!found || normalizeUsername(found.user.username||found.key)!==username){
+    $('authError').textContent='Username verification expired. Start again.';
+    return;
+  }
+  if(normalizeEmail(found.user.email||'')!==email){
+    $('authError').textContent='The email does not match the email registered with this username.';
+    return;
+  }
+  if(pass.length<6){
+    $('authError').textContent='New password must be at least 6 characters.';
+    return;
+  }
+  if(pass!==confirm){
+    $('authError').textContent='New passwords do not match.';
+    return;
+  }
+
+  users[found.key].password=pass;
+  users[found.key].updated=new Date().toISOString();
+  localStorage.setItem('nova_users',JSON.stringify(users));
+
+  $('authRecovery').style.display='none';
+  $('authSubmit').style.display='block';
+  $('authBack').style.display='none';
+  $('authPassWrap').style.display='block';
+  $('rememberWrap').style.display='flex';
+  authTab('login');
+  $('authEmail').value=username;
+  $('authPass').value='';
+  $('authSuccess').textContent='Password changed successfully ✓ You can now log in.';
+}
+
+function logoutNova(){
+  localStorage.removeItem('nova_current_user');
+  sessionStorage.removeItem('nova_current_user');
+  localStorage.removeItem('nova_remember_me');
+  updateAuthUI();
+  toast('Logged out. You can continue as a guest.');
+}
+
+function updateAuthUI(){
+  const u=getCurrentUser();
+  const btn=$('authBtn'),box=$('authUser');
+  if(!btn)return;
+  if(u){
+    btn.textContent='🚪 Logout';
+    btn.onclick=logoutNova;
+    if(box)box.innerHTML=`<span class="user-chip"><span class="avatar">${escapeHtml(u.charAt(0).toUpperCase())}</span><span>${escapeHtml(u)}</span></span>`;
+  }else{
+    btn.textContent='🔐 Login';
+    btn.onclick=openAuth;
+    if(box)box.innerHTML='';
+  }
+}
+
+function restoreRememberedLogin(){
+  const remembered=localStorage.getItem('nova_current_user');
+  const remember=localStorage.getItem('nova_remember_me')==='1';
+  if(remember && remembered){
+    sessionStorage.removeItem('nova_current_user');
+  }else if(remembered && !remember){
+    localStorage.removeItem('nova_current_user');
+  }
+  updateAuthUI();
+}
+
+
+const $=id=>document.getElementById(id);
+const state={
+  chats:Number(localStorage.getItem('nova_chats')||0),
+  favs:JSON.parse(localStorage.getItem('nova_favs')||'[]'),
+  tasks:JSON.parse(localStorage.getItem('nova_tasks')||'[]'),
+  notes:localStorage.getItem('nova_notes')||'',
+  history:JSON.parse(localStorage.getItem('nova_searches')||'[]'),
+  theme:localStorage.getItem('nova_theme')||'dark',
+  aiMode:localStorage.getItem('nova_ai_mode')||'normal',
+  records:JSON.parse(localStorage.getItem('nova_records')||'{}'),
+  streak:Number(localStorage.getItem('nova_streak')||1),
+  xp:Number(localStorage.getItem('nova_xp')||0)
+};
+
+const modules=[
+ ['✦','Nova AI','Ask, explain, brainstorm and calculate.','nova'],
+ ['🔎','Web Search','Launch Google searches from Nova.','search'],
+ ['🎮','Nova Arcade','Play mini games offline.','games'],
+ ['🎬','Movie Explorer','Discover movies and actors.','movies'],
+ ['🎵','Music Hub','Find songs and artists.','songs'],
+ ['🏆','Sports Center','Search scores and schedules.','sports'],
+ ['❤','Health Lab','Useful educational calculators.','health'],
+ ['📚','Nova Academy','Learning topics and study searches.','education'],
+ ['☪','Quran & Islam','Quran and Islamic study searches.','islam'],
+ ['📝','Workspace','Tasks, notes and focus timer.','workspace'],
+ ['★','Favorites','Keep your important links.','favorites'],
+ ['⚙','Settings','Control your local Nova data.','settings']
+];
+const quick=[
+ ['✦','Ask Nova','nova'],['🔎','Google','search'],['🎮','Arcade','games'],['📝','Workspace','workspace'],
+ ['❤','BMI','health'],['📚','Learn','education'],['☪','Quran','islam'],['★','Saved','favorites']
+];
+function renderHome(){
+ $('moduleGrid').innerHTML=modules.slice(0,9).map(x=>`<div class="card" onclick="showPage('${x[3]}')" style="cursor:pointer"><div class="bigico">${x[0]}</div><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('');
+ $('quickGrid').innerHTML=quick.map(x=>`<div class="tool"><div>${x[0]} &nbsp;<b>${x[1]}</b></div><button class="btn" onclick="showPage('${x[2]}')">Open</button></div>`).join('');
+ updateStats();
+}
+function updateStats(){
+ $('statChats').textContent=state.chats;$('statFav').textContent=state.favs.length;$('statTasks').textContent=state.tasks.filter(x=>!x.done).length;
+}
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const target=$('page-'+page);if(target)target.classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  $('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'});
+  if(page==='favorites')renderFavorites();if(page==='workspace')renderTasks();if(page==='leaderboard')renderRecords();if(page==='discover')renderDiscover();if(page==='profile')renderProfile();if(page==='academy')initAcademy();
+}
+function toggleSidebar(){$('sidebar').classList.toggle('open')}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(window.toastT);window.toastT=setTimeout(()=>$('toast').classList.remove('show'),2500)}
+function toggleTheme(){
+  state.theme=state.theme==='dark'?'light':'dark';localStorage.setItem('nova_theme',state.theme);
+  document.documentElement.style.setProperty('--bg',state.theme==='light'?'#eef3fb':'#070b16');
+  document.documentElement.style.setProperty('--panel',state.theme==='light'?'#ffffff':'#0d1426');
+  document.body.style.color=state.theme==='light'?'#111827':'var(--text)';
+  toast(state.theme==='light'?'Light theme enabled':'Dark theme enabled');
+}
+function googleSearch(q){
+ q=(q||$('webQuery').value||'').trim();if(!q)return toast('Type something to search.');
+ state.history=[q,...state.history.filter(x=>x!==q)].slice(0,8);addXP(2,'Web search');state.streak=Math.max(1,state.streak);localStorage.setItem('nova_streak',state.streak);localStorage.setItem('nova_searches',JSON.stringify(state.history));renderHistory();
+ window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener');
+}
+function luckySearch(){
+ const q=$('webQuery').value.trim();if(!q)return toast('Type something first.');
+ window.open('https://www.google.com/search?btnI=1&q='+encodeURIComponent(q),'_blank','noopener');
+}
+function renderHistory(){
+ $('searchHistory').innerHTML=state.history.length?'<b>Recent searches</b>'+state.history.map(q=>`<div class="result" style="display:flex;justify-content:space-between;align-items:center"><span>${escapeHtml(q)}</span><button class="btn" onclick="googleSearch(${JSON.stringify(q)})">Search ↗</button></div>`).join(''):'<p style="color:var(--muted)">No recent searches yet.</p>';
+}
+function globalSearch(){
+ const q=$('globalSearch').value.trim();if(!q)return;
+ if(/^(open|show) (games?|arcade)/i.test(q))return showPage('games');
+ if(/^(open|show) (ai|nova)/i.test(q))return showPage('nova');
+ if(/^(open|show) (workspace|tasks|notes)/i.test(q))return showPage('workspace');
+  if(/^(open|show) (movies?|cinema)/i.test(q))return showPage('movies');
+  if(/^(open|show) (songs?|music)/i.test(q))return showPage('songs');
+  if(/^(open|show) (sports?)/i.test(q))return showPage('sports');
+  if(/^(open|show) (health)/i.test(q))return showPage('health');
+  if(/^(open|show) (discover)/i.test(q))return showPage('discover');
+  if(/^(open|show) (leaderboard|records)/i.test(q))return showPage('leaderboard');
+ if(/dark mode/i.test(q)){if(state.theme!=='dark')toggleTheme();return}
+ if(/light mode/i.test(q)){if(state.theme!=='light')toggleTheme();return}
+ showPage('search');$('webQuery').value=q;googleSearch(q);
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function addMsg(text,user=false){
+ const wrap=document.createElement('div');wrap.className='msg '+(user?'user':'');
+ wrap.innerHTML=`<div class="avatar">${user?'U':'N'}</div><div class="bubble">${text}</div>`;
+ $('messages').appendChild(wrap);$('messages').scrollTop=$('messages').scrollHeight;
+}
+function initChat(){
+ const saved=JSON.parse(localStorage.getItem('nova_chat_messages')||'[]');
+ if(!saved.length)addMsg("Hi! I'm <b>Nova</b> ✦. Ask me a question, ask for an idea, calculate something, or tell me to open a Nova Verse module.");
+ else saved.forEach(m=>addMsg(m.text,m.user));
+}
+function saveChatMessage(text,user){let a=JSON.parse(localStorage.getItem('nova_chat_messages')||'[]');a.push({text,user});a=a.slice(-80);localStorage.setItem('nova_chat_messages',JSON.stringify(a))}
+function clearChat(){localStorage.removeItem('nova_chat_messages');$('messages').innerHTML='';initChat();toast('Chat cleared')}
+function quickAsk(q){$('aiInput').value=q;sendAI()}
+function sendAI(){
+ const input=$('aiInput'),q=input.value.trim();if(!q)return;
+ addMsg(escapeHtml(q),true);saveChatMessage(escapeHtml(q),true);input.value='';
+ state.chats++;localStorage.setItem('nova_chats',state.chats);updateStats();updateLevel();addXP(2,'Nova conversation');
+ setTimeout(()=>{const a=localAnswer(q);addMsg(a);saveChatMessage(a,false);speakNova(a)},280);
+}
+
+let aiMode=state.aiMode;
+function setAIMode(mode,el){
+  aiMode=mode;state.aiMode=mode;localStorage.setItem('nova_ai_mode',mode);
+  document.querySelectorAll('#aiModes .pill').forEach(x=>x.classList.remove('active'));
+  if(el)el.classList.add('active');
+  toast('Nova mode: '+mode);
+}
+function researchMode(){
+  const q=prompt('What topic do you want to research?','artificial intelligence');
+  if(q){showPage('search');$('webQuery').value=q+' latest research news explained';googleSearch();}
+}
+function dailyChallenge(){
+  const games=['startTicTacToe','startMemory','startReaction','startGuess','startRPS','startMathGame','startTarget','startSequence','start2048','startWordScramble','startQuiz','startCoin'];
+  window[games[Math.floor(Math.random()*games.length)]]();
+  showPage('games');
+}
+function surpriseMe(){
+  const choices=[['games','Nova Arcade'],['movies','Movie Explorer'],['songs','Music Hub'],['sports','Sports Center'],['discover','Nova Discover'],['education','Nova Academy']];
+  const c=choices[Math.floor(Math.random()*choices.length)];
+  showPage(c[0]);toast('Nova picked '+c[1]+' ✨');
+}
+function discoverPreset(q){$('discoverQ').value=q;discoverSearch()}
+function discoverSearch(){const q=$('discoverQ').value.trim()||'interesting things to discover';googleSearch(q+' latest interesting discoveries')}
+
+function localAnswer(q){
+  const l=q.toLowerCase();
+  if(/what can nova|features|nova verse/.test(l))return "Nova Verse 3.0 is a <b>single-file digital universe</b> with AI chat modes, Google search, games, movies, music, sports, health tools, education, discovery, favorites, tasks, notes and achievements.";
+  if(/hello|hi |hey/.test(l))return "Hello! 👋 I'm Nova. Pick a mode and give me a challenge.";
+  if(/who (made|created)|owner|abdullah/.test(l))return "Nova Verse lists <b>Abdullah Ateeq</b> as its creator.";
+  if(/open (games?|arcade)/.test(l)){showPage('games');return "Opening <b>Nova Arcade</b> 🎮."}
+  if(/open (workspace|tasks|notes)/.test(l)){showPage('workspace');return "Opening your <b>Workspace</b> 📝."}
+  if(/open (search|google)/.test(l)){showPage('search');return "Opening <b>Web Search</b> 🔎."}
+  if(/open (movies?|cinema)/.test(l)){showPage('movies');return "Opening <b>Nova Cinema</b> 🎬."}
+  if(/open (songs?|music)/.test(l)){showPage('songs');return "Opening <b>Nova Music Hub</b> 🎵."}
+  if(/open (sports?)/.test(l)){showPage('sports');return "Opening <b>Sports Center</b> 🏆."}
+  if(/open (health)/.test(l)){showPage('health');return "Opening <b>Health Lab</b> ❤️."}
+  if(/open (discover)/.test(l)){showPage('discover');return "Opening <b>Nova Discover</b> ✨."}
+  if(/dark mode/.test(l)){if(state.theme!=='dark')toggleTheme();return "Dark mode is on. 🌙"}
+  if(/light mode/.test(l)){if(state.theme!=='light')toggleTheme();return "Light mode is on. ☀️"}
+  if(/^(calculate|what is|solve)\b/.test(l)||/^\d+[\d\s+\-*/().%]+$/.test(l)){
+    const expr=q.replace(/^(calculate|what is|solve)\s*/i,'').replace(/[^0-9+\-*/().% ]/g,'');
+    try{if(expr&&/[0-9]/.test(expr)){const result=Function('"use strict";return ('+expr+')')();if(Number.isFinite(result))return `The answer is <b>${result}</b>.`;}}catch(e){}
+  }
+  if(/artificial intelligence|machine learning|\bai\b/.test(l)){
+    let base="Artificial intelligence is the field of building systems that perform tasks associated with human intelligence, such as recognizing patterns, generating language, making predictions and solving problems.";
+    if(aiMode==='teacher')base+="<br><br><b>Teacher mode:</b> Think of AI as software that learns patterns from examples and then uses those patterns to produce useful results.";
+    if(aiMode==='coder')base+="<br><br><b>Coder mode:</b> A practical AI app usually has a user interface, an inference/model layer, data handling and sometimes APIs or a backend.";
+    if(aiMode==='creative')base+="<br><br><b>Creative mode:</b> Imagine Nova as a digital control room where search, learning, games and creation meet.";
+    return base;
+  }
+  if(/coding|programming|project ideas/.test(l))return "Strong competition ideas: <b>1.</b> AI study coach, <b>2.</b> accessibility assistant, <b>3.</b> research dashboard, <b>4.</b> productivity workspace, <b>5.</b> interactive learning universe. Nova Verse combines several of these directions.";
+  if(/time|date/.test(l))return "Your browser's current date/time is <b>"+new Date().toLocaleString()+"</b>.";
+  if(/weather|news|latest|score|price|stock/.test(l))return "That needs live information. I'll send you to <b>Google Web Search</b> so you can get current results.";
+  if(/thank/.test(l))return "You're welcome! 🚀 Keep building.";
+  return "I can help with explanations, calculations, Nova commands and project ideas. For live information, use <b>Web Search</b>. Try <i>open games</i>, <i>calculate 25 * 48</i>, or <i>open discover</i>.";
+}
+
+const movies=[
+ 'Inception','Interstellar','The Dark Knight','Avengers: Endgame','Spider-Man: No Way Home','Dune','Dune: Part Two','Oppenheimer','Avatar','Avatar: The Way of Water','The Matrix','Gladiator','Titanic','The Lion King','The Lord of the Rings: The Fellowship of the Ring','The Lord of the Rings: The Two Towers','The Lord of the Rings: The Return of the King','Harry Potter and the Sorcerer’s Stone','Harry Potter and the Deathly Hallows – Part 2','Star Wars: A New Hope','Star Wars: The Empire Strikes Back','Jurassic Park','Top Gun: Maverick','Mission: Impossible – Dead Reckoning','Black Panther','Iron Man','Captain America: Civil War','Guardians of the Galaxy','Doctor Strange','Deadpool & Wolverine','Joker','The Batman','Parasite','Whiplash','Forrest Gump','The Shawshank Redemption','The Godfather','Toy Story','Finding Nemo','Inside Out','Coco','Frozen','Moana','Kung Fu Panda','How to Train Your Dragon','Spider-Man: Into the Spider-Verse','The Super Mario Bros. Movie','The Hunger Games','John Wick','A Quiet Place','Godzilla x Kong: The New Empire'
+];
+const songs=[
+ 'Blinding Lights — The Weeknd','Starboy — The Weeknd','Save Your Tears — The Weeknd','Die For You — The Weeknd','Shape of You — Ed Sheeran','Perfect — Ed Sheeran','Photograph — Ed Sheeran','Believer — Imagine Dragons','Thunder — Imagine Dragons','Demons — Imagine Dragons','As It Was — Harry Styles','Watermelon Sugar — Harry Styles','Stay — The Kid LAROI & Justin Bieber','Counting Stars — OneRepublic','Apologize — OneRepublic','Numb — Linkin Park','In the End — Linkin Park','Lovely — Billie Eilish & Khalid','Birds of a Feather — Billie Eilish','Bad Guy — Billie Eilish','Happier Than Ever — Billie Eilish','Bohemian Rhapsody — Queen','Don’t Stop Me Now — Queen','Another One Bites the Dust — Queen','Someone Like You — Adele','Hello — Adele','Rolling in the Deep — Adele','Easy On Me — Adele','Uptown Funk — Mark Ronson ft. Bruno Mars','Just the Way You Are — Bruno Mars','Locked Out of Heaven — Bruno Mars','Grenade — Bruno Mars','Calm Down — Rema & Selena Gomez','One Dance — Drake','God’s Plan — Drake','Lose Yourself — Eminem','Mockingbird — Eminem','See You Again — Wiz Khalifa ft. Charlie Puth','Havana — Camila Cabello','Senorita — Shawn Mendes & Camila Cabello','Levitating — Dua Lipa','Don’t Start Now — Dua Lipa','Flowers — Miley Cyrus','Anti-Hero — Taylor Swift','Cruel Summer — Taylor Swift','APT. — ROSÉ & Bruno Mars','Sapphire — Ed Sheeran','APT. — ROSÉ & Bruno Mars','Until I Found You — Stephen Sanchez','Golden Hour — JVKE'
+];
+function renderList(arr,id,type){
+ const grid=$(id);
+ grid.innerHTML=arr.map((x,i)=>`<div class="card filter-item"><div class="bigico">${type==='movie'?'🎬':'🎵'}</div><span class="badge">${type==='movie'?'MOVIE':'MUSIC'} • #${i+1}</span><h4>${escapeHtml(x)}</h4><p>${type==='movie'?'Explore trailers, cast, ratings, reviews and where to watch.':'Explore lyrics, artist info, videos, albums and related music.'}</p><div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn primary js-search">▶ ${type==='movie'?'Trailer':'Listen'}</button><button class="btn js-details">🔎 Details</button><button class="btn js-save">★ Save</button></div></div>`).join('');
+ grid.querySelectorAll('.filter-item').forEach((card,i)=>{
+   const name=arr[i];
+   card.querySelector('.js-search').addEventListener('click',()=>googleSearch(name+' '+(type==='movie'?'movie trailer':'official song')));
+   card.querySelector('.js-details').addEventListener('click',()=>googleSearch(name));
+   card.querySelector('.js-save').addEventListener('click',()=>fav(name,type));
+ });
+}
+function filterCards(inputId,gridId){
+ const q=$(inputId).value.toLowerCase();document.querySelectorAll('#'+gridId+' .filter-item').forEach(c=>c.style.display=c.textContent.toLowerCase().includes(q)?'block':'none');
+}
+const sports=['Football Scores','Saudi Pro League','Premier League','La Liga','UEFA Champions League','NBA','Tennis','Formula 1','Cricket','WWE','Olympics','FIFA World Cup','AFC Champions League','Saudi National Team','NFL','MLB','NHL','UFC','Boxing','Golf','MotoGP','Cycling','Athletics','Volleyball','Basketball','Esports','World Rankings','Transfer News','Match Schedules','Sports News','Live Scores'];
+const education=['Mathematics','Physics','Chemistry','Biology','Computer Science','Artificial Intelligence','Web Development','JavaScript','Cybersecurity','History','Geography','English','Arabic','Economics','Space Science','Engineering'];
+const islam=['Quran','Quran Tafsir','Hadith','Seerah','Fiqh','Dua','Quranic Arabic','Islamic History'];
+const shops=[['🛒','Amazon','https://www.amazon.com'],['🛍','Haraj','https://haraj.com.sa'],['🍔','ALBAIK','https://www.albaik.com'],['🍽','Balalm','https://balalm.net'],['🔎','Google Food','https://www.google.com/search?q=food+near+me']];
+function topicCards(arr,id,emoji,queryPrefix){
+ const grid=$(id);
+ if(!grid)return;
+ grid.innerHTML='';
+ arr.forEach((x)=>{
+   const card=document.createElement('div');
+   card.className='card';
+   card.innerHTML=`<div class="bigico">${emoji}</div><h4>${escapeHtml(x)}</h4><p>Explore current information and useful resources.</p>`;
+   const btn=document.createElement('button');
+   btn.className='btn primary';
+   btn.style.marginTop='12px';
+   btn.type='button';
+   btn.textContent='Explore ↗';
+   btn.addEventListener('click',()=>{ googleSearch(queryPrefix+' '+x); });
+   card.appendChild(btn);
+   grid.appendChild(card);
+ });
+}
+function renderSports(){topicCards(sports,'sportsGrid','🏆','latest');}
+function renderEducation(){topicCards(education,'educationGrid','📚','learn');}
+function renderIslam(){topicCards(islam,'islamGrid','☪','Islam');}
+let activeShop='Amazon';
+const shopSearchUrls={
+  Amazon:q=>'https://www.amazon.com/s?k='+encodeURIComponent(q),
+  Haraj:q=>'https://haraj.com.sa/search/'+encodeURIComponent(q),
+  ALBAIK:q=>'https://www.google.com/search?q='+encodeURIComponent('ALBAIK '+q),
+  Balalm:q=>'https://www.google.com/search?q='+encodeURIComponent('Balalm '+q),
+  'Google Food':q=>'https://www.google.com/search?q='+encodeURIComponent(q+' food')
+};
+function renderShops(){
+  const grid=$('shopGrid'), stores=$('shopStores');
+  if(!grid||!stores)return;
+  const available=shops.filter(x=>shopSearchUrls[x[1]]);
+  stores.innerHTML=available.map(x=>`<button class="shop-store ${activeShop===x[1]?'active':''}" type="button" onclick="selectShop('${escapeHtml(x[1])}')">${x[0]} ${escapeHtml(x[1])}</button>`).join('');
+  grid.innerHTML=available.map(x=>`<div class="card"><div class="bigico">${x[0]}</div><h4>${escapeHtml(x[1])}</h4><p>Search products directly on ${escapeHtml(x[1])}.</p><button class="btn primary" style="margin-top:12px" onclick="selectShop('${escapeHtml(x[1])}');shopSearchActive()">Search here ↗</button></div>`).join('');
+}
+function selectShop(name){
+  activeShop=name;
+  renderShops();
+  const input=$('shopSearch');
+  if(input)input.focus();
+}
+function shopSearchActive(){
+  const q=($('shopSearch')?.value||'').trim();
+  if(!q)return toast('Type a product to search.');
+  const fn=shopSearchUrls[activeShop];
+  if(!fn)return;
+  window.open(fn(q),'_blank','noopener');
+  addXP(2,'Shopping search');
+}
+
+function calcBMI(){
+ const age=+$('bmiAge').value,w=+$('bmiW').value,h=+$('bmiH').value/100;
+ if(!age||age<2||!w||!h)return;
+ const bmi=w/(h*h);
+ if(age<20){
+   $('bmiOut').innerHTML=`<b>BMI: ${bmi.toFixed(1)}</b><br><span style="color:var(--muted)">For ages 2–19, BMI should be interpreted using age- and sex-specific growth charts/percentiles.</span>`;
+   return;
+ }
+ let c=bmi<18.5?'Underweight':bmi<25?'Normal range':bmi<30?'Overweight':'Obesity';
+ $('bmiOut').innerHTML=`<b>${bmi.toFixed(1)}</b><br><span style="color:var(--muted)">${c} • Age ${age}</span>`;
+}
+function calcWater(){const w=+$('waterW').value;if(!w)return;$('waterOut').innerHTML=`About <b>${(w*0.033).toFixed(1)} L/day</b> as a simple estimate. Needs vary by person and conditions.`}
+function calcHR(){const age=+$('age').value;if(!age)return;const max=220-age;$('hrOut').innerHTML=`Estimated max heart rate: <b>${max} bpm</b><br><span style="color:var(--muted)">Moderate zone ≈ ${Math.round(max*.5)}–${Math.round(max*.7)} bpm.</span>`}
+
+
+function calcCalories(){const w=+$('calW').value,m=+$('calM').value,i=+$('calI').value;if(!w||!m)return;$('calOut').innerHTML=`Estimated burn: <b>${Math.round(i*w/60*m)} kcal</b><br><span style="color:var(--muted)">A rough educational estimate.</span>`}
+function calcBodyFat(){const age=+$('bfAge').value,bmi=+$('bfBMI').value,sex=+$('bfSex').value;if(!age||!bmi)return;const bf=(1.20*bmi)+(0.23*age)-(10.8*sex)-5.4;$('bfOut').innerHTML=`Estimated body-fat percentage: <b>${bf.toFixed(1)}%</b><br><span style="color:var(--muted)">Population formula; individual results vary.</span>`}
+function calcSleep(){const [h,m]=$('wakeTime').value.split(':').map(Number);const out=[];[6,7.5,9].forEach(hours=>{let mins=h*60+m-Math.round(hours*60);mins=(mins+1440)%1440;out.push(String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0'))});$('sleepOut').innerHTML=`Suggested bedtimes: <b>${out.join(' · ')}</b><br><span style="color:var(--muted)">Sleep-cycle timing is only a rough planning aid.</span>`}
+function calcIdealWeight(){const h=+$('iwH').value/100;if(!h)return;const low=18.5*h*h,high=24.9*h*h;$('iwOut').innerHTML=`BMI-based reference range: <b>${low.toFixed(1)}–${high.toFixed(1)} kg</b>`}
+function calcPace(){const d=+$('paceD').value,t=+$('paceT').value;if(!d||!t)return;const pace=t/d;const ph=Math.floor(pace),pm=Math.round((pace-ph)*60);$('paceOut').innerHTML=`Pace: <b>${ph}:${String(pm).padStart(2,'0')} min/km</b><br>Speed: <b>${(60/pace).toFixed(1)} km/h</b>`}
+
+function calcTargetZone(){
+  const age=+$('tzAge').value,rest=+$('tzRest').value;if(!age||!rest)return;
+  const max=220-age,reserve=max-rest,low=Math.round(rest+reserve*.5),high=Math.round(rest+reserve*.7);
+  $('tzOut').innerHTML=`Training zone: <b>${low}–${high} bpm</b><br><span style="color:var(--muted)">Heart-rate reserve estimate.</span>`;
+}
+function calcDailyCalories(){
+  const w=+$('dcW').value,h=+$('dcH').value,a=+$('dcA').value,m=+$('dcAct').value;if(!w||!h||!a)return;
+  const bmr=10*w+6.25*h-5*a+5,total=Math.round(bmr*m);
+  $('dcOut').innerHTML=`Estimated daily energy: <b>${total} kcal/day</b><br><span style="color:var(--muted)">Uses a simple BMR estimate; individual needs vary.</span>`;
+}
+let hydrationTimer=null;
+function startHydration(){
+  const mins=+$('hydrationM').value||60;clearInterval(hydrationTimer);
+  $('hydrationOut').textContent=`Reminder active every ${mins} minutes.`;
+  hydrationTimer=setInterval(()=>{toast('💧 Hydration reminder — take a water break!');},mins*60000);
+}
+function startBreathing(){
+  let left=60,phase=0;clearInterval(window.breathTimer);
+  const phases=['Breathe in','Breathe out'];$('breathOut').textContent='Breathe in';
+  window.breathTimer=setInterval(()=>{left--;phase=1-phase;$('breathOut').textContent=phases[phase]+' • '+left+'s';if(left<=0){clearInterval(window.breathTimer);$('breathOut').textContent='Complete ✓';toast('Breathing session complete');}},1000);
+}
+
+function calcReadiness(){const s=+$('readySleep').value,e=+$('readyEnergy').value,so=+$('readySore').value;const score=Math.max(0,Math.min(100,s/8*50+e*5-so*5));let label=score>=75?'Good readiness':score>=50?'Moderate readiness':'Consider an easier day';$('readyOut').innerHTML=`<b>${Math.round(score)}/100</b><br><span style="color:var(--muted)">${label}. Listen to your body.</span>`}
+function initHealthChecklist(){const items=['Drink water','Move / stretch','Balanced meal','Outdoor time','Wind down before sleep'];$('healthChecklist').innerHTML=items.map((x,i)=>`<label style="display:block;padding:9px 0;border-bottom:1px solid var(--line)"><input type="checkbox" onchange="localStorage.setItem('health_${i}',this.checked)"> ${x}</label>`).join('');items.forEach((x,i)=>{const c=document.querySelector('#healthChecklist input:nth-of-type('+(i+1)+')');if(c)c.checked=localStorage.getItem('health_'+i)==='true'})}
+
+function fav(name,type){
+ if(!state.favs.some(x=>x.name===name)){state.favs.push({name,type});localStorage.setItem('nova_favs',JSON.stringify(state.favs));toast('Saved to favorites ★')}
+ else toast('Already saved');
+ updateStats();
+}
+function renderFavorites(){
+ $('favoritesList').innerHTML=state.favs.length?state.favs.map((x,i)=>`<div class="result" style="display:flex;align-items:center;gap:10px"><span style="flex:1"><b>${escapeHtml(x.name)}</b><small style="display:block;color:var(--muted)">${x.type}</small></span><button class="btn" onclick="googleSearch(${JSON.stringify(x.name)})">Open ↗</button><button class="btn danger" onclick="removeFav(${i})">Remove</button></div>`).join(''):'<p style="color:var(--muted)">No favorites yet. Save movies or songs with ★.</p>';
+}
+function removeFav(i){state.favs.splice(i,1);localStorage.setItem('nova_favs',JSON.stringify(state.favs));renderFavorites();updateStats()}
+
+function renderTasks(){
+ $('tasks').innerHTML=state.tasks.length?state.tasks.map((t,i)=>`<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})"><span>${escapeHtml(t.text)}</span><button onclick="removeTask(${i})">✕</button></div>`).join(''):'<p style="color:var(--muted)">No tasks yet.</p>';
+ updateStats();
+}
+function addTask(){const v=$('taskInput').value.trim();if(!v)return;$('taskInput').value='';state.tasks.push({text:v,done:false});localStorage.setItem('nova_tasks',JSON.stringify(state.tasks));renderTasks();toast('Task added')}
+function toggleTask(i){state.tasks[i].done=!state.tasks[i].done;localStorage.setItem('nova_tasks',JSON.stringify(state.tasks));renderTasks()}
+function removeTask(i){state.tasks.splice(i,1);localStorage.setItem('nova_tasks',JSON.stringify(state.tasks));renderTasks()}
+function saveNotes(){localStorage.setItem('nova_notes',$('notes').value);state.notes=$('notes').value;$('noteStatus').textContent='Saved ✓';setTimeout(()=>$('noteStatus').textContent='',1500)}
+
+let timerSeconds=1500,timerInterval=null;
+function paintTimer(){const m=String(Math.floor(timerSeconds/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');$('timer').textContent=m+':'+s}
+function startTimer(){if(timerInterval)return;timerInterval=setInterval(()=>{if(timerSeconds>0){timerSeconds--;paintTimer()}else{pauseTimer();toast('Focus session complete! 🎉')}},1000)}
+function pauseTimer(){clearInterval(timerInterval);timerInterval=null}
+function resetTimer(){pauseTimer();timerSeconds=1500;paintTimer()}
+
+function startTicTacToe(){
+  launchGameScreen();
+ let board=Array(9).fill(''),turn='X',over=false;
+ $('gameArea').innerHTML=`<div><h3>Tic-Tac-Toe</h3><p style="color:var(--muted);margin:7px">You are X. Nova is O.</p><div class="game-board" id="ttt"></div><p id="tttStatus" style="margin-top:12px"></p><button class="btn" style="margin-top:10px" onclick="startTicTacToe()">Restart</button></div>`;
+ const win=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+ function check(){for(const a of win)if(board[a[0]]&&board[a[0]]===board[a[1]]&&board[a[1]]===board[a[2]])return board[a[0]];return board.every(Boolean)?'draw':null}
+ function ai(){const empty=board.map((v,i)=>v?null:i).filter(v=>v!==null);if(!empty.length)return;const i=empty[Math.floor(Math.random()*empty.length)];board[i]='O';render();const r=check();if(r)return end(r);turn='X'}
+ function click(i){if(over||turn!=='X'||board[i])return;board[i]='X';render();let r=check();if(r)return end(r);turn='O';setTimeout(ai,280)}
+ function render(){$('ttt').innerHTML=board.map((v,i)=>`<button class="cell" onclick="window.__tttClick(${i})">${v}</button>`).join('')}
+ function end(r){over=true;$('tttStatus').textContent=r==='draw'?'Draw!':r+' wins!';if(r==='X')toast('You won! 🏆')}
+ window.__tttClick=click;render();
+}
+function startMemory(){
+  launchGameScreen();
+ const emojis=['🚀','🧠','⚡','🎮','🌙','🔥','🚀','🧠','⚡','🎮','🌙','🔥'].sort(()=>Math.random()-.5);
+ let open=[],matched=0,locked=false;
+ $('gameArea').innerHTML=`<div><h3>Memory Challenge</h3><p style="color:var(--muted);margin:7px">Match every pair.</p><div id="memoryBoard" style="display:grid;grid-template-columns:repeat(4,62px);gap:8px"></div><p id="memoryStatus" style="margin-top:12px">0 / 6 matched</p></div>`;
+ function render(){ $('memoryBoard').innerHTML=emojis.map((e,i)=>`<button class="cell" style="width:62px;height:62px;font-size:24px" onclick="window.__mem(${i})">${open.includes(i)||matchedIds.includes(i)?e:'?'}</button>`).join('')}
+ let matchedIds=[];
+ window.__mem=i=>{if(locked||open.includes(i)||matchedIds.includes(i))return;open.push(i);render();if(open.length===2){locked=true;setTimeout(()=>{if(emojis[open[0]]===emojis[open[1]]){matchedIds.push(...open);matched+=1;$('memoryStatus').textContent=matched+' / 6 matched'}open=[];locked=false;render();if(matched===6)toast('Memory complete! 🏆')},450)}};render();
+}
+function startReaction(){
+  launchGameScreen();
+ $('gameArea').innerHTML=`<div><h3>Reaction Test</h3><p style="color:var(--muted);margin:7px">Wait for green, then click.</p><button id="reactionBtn" class="btn primary" style="padding:25px 55px;margin-top:25px" onclick="reactionClick()">START</button><p id="reactionOut" style="margin-top:15px"></p></div>`;
+ window.reactionReady=false;window.reactionStart=0;window.reactionTimer=null;
+}
+function reactionClick(){
+ const b=$('reactionBtn');
+ if(!window.reactionReady){b.textContent='WAIT…';b.className='btn';const delay=1000+Math.random()*3000;window.reactionTimer=setTimeout(()=>{window.reactionReady=true;window.reactionStart=performance.now();b.textContent='CLICK!';b.className='btn primary'},delay);return}
+ const ms=Math.round(performance.now()-window.reactionStart);b.textContent='TRY AGAIN';window.reactionReady=false;$('reactionOut').innerHTML=`Your reaction time: <b>${ms} ms</b>`;clearTimeout(window.reactionTimer);
+}
+
+
+function startGuess(){
+  launchGameScreen();
+ let secret=Math.floor(Math.random()*100)+1,tries=0;
+ $('gameArea').innerHTML=`<div><h3>Number Guess</h3><p style="color:var(--muted);margin:7px">Nova picked a number from 1 to 100.</p><div class="field"><input id="guessInput" type="number" min="1" max="100" placeholder="Your guess"></div><button class="btn primary" onclick="guessNumber()">Guess</button><p id="guessOut" style="margin-top:15px"></p></div>`;
+ window.__secret=secret;window.__tries=0;
+}
+function guessNumber(){
+ const n=+$('guessInput').value;if(!n)return;
+ window.__tries++;const out=$('guessOut');
+ if(n===window.__secret){out.innerHTML=`🏆 Correct! You found it in <b>${window.__tries}</b> tries.`;toast('You won!')}
+ else out.textContent=n<window.__secret?'Too low ⬆️':'Too high ⬇️';
+}
+function startRPS(){
+  launchGameScreen();
+ $('gameArea').innerHTML=`<div><h3>Rock Paper Scissors</h3><p style="color:var(--muted);margin:7px">Choose your move.</p><div class="row" style="justify-content:center;margin-top:18px">${['🪨 Rock','📄 Paper','✂️ Scissors'].map((x,i)=>`<button class="btn primary" onclick="playRPS(${i})">${x}</button>`).join('')}</div><p id="rpsOut" style="margin-top:18px"></p></div>`;
+}
+function playRPS(p){
+ const names=['Rock','Paper','Scissors'],n=Math.floor(Math.random()*3);let r=p===n?'Draw':((p-n+3)%3===1?'You win!':'Nova wins!');
+ $('rpsOut').innerHTML=`You: <b>${names[p]}</b> · Nova: <b>${names[n]}</b><br><br><b>${r}</b>`;
+}
+function startMathGame(){
+  launchGameScreen();
+ let score=0,q=0,answer=0,endAt=Date.now()+30000;
+ $('gameArea').innerHTML=`<div><h3>⚡ Speed Math</h3><p style="color:var(--muted)">30 seconds. Get as many as possible.</p><div style="font-size:36px;margin:18px" id="mathQ"></div><input id="mathA" type="number" class="field" style="max-width:240px;text-align:center"><button class="btn primary" onclick="mathSubmit()">Answer</button><p id="mathOut" style="margin-top:12px"></p></div>`;
+ function next(){if(Date.now()>=endAt){$('mathOut').innerHTML=`Time! Score: <b>${score}</b>`;return}let a=Math.floor(Math.random()*20)+1,b=Math.floor(Math.random()*20)+1;answer=a+b;q++;$('mathQ').textContent=`${a} + ${b} = ?`;window.__mathAnswer=answer;window.__mathEnd=endAt;window.__mathScore=score;window.__mathNext=next}
+ window.__mathScore=0;next();
+}
+function mathSubmit(){if(Date.now()>=window.__mathEnd)return $('mathOut').innerHTML=`Time! Score: <b>${window.__mathScore}</b>`;if(+$('mathA').value===window.__mathAnswer)window.__mathScore++;$('mathA').value='';window.__mathNext()}
+function startTarget(){
+  launchGameScreen();
+ $('gameArea').innerHTML=`<div style="width:100%"><h3>🎯 Target Click</h3><p style="color:var(--muted)">You have 20 seconds.</p><div id="targetBox" style="height:250px;margin-top:15px;border:1px solid var(--line);border-radius:18px;position:relative;background:#081020"></div><p id="targetOut" style="margin-top:10px">Hits: 0</p></div>`;
+ let hits=0,start=Date.now();const box=$('targetBox');
+ function place(){if(Date.now()-start>=20000){$('targetOut').innerHTML=`Time! Hits: <b>${hits}</b>`;box.innerHTML='';return}const x=Math.random()*(box.clientWidth-55),y=Math.random()*(box.clientHeight-55);box.innerHTML=`<button class="btn primary" style="position:absolute;left:${x}px;top:${y}px;width:55px;height:55px;border-radius:50%" onclick="window.__targetHit()">●</button>`}
+ window.__targetHit=()=>{hits++;$('targetOut').textContent='Hits: '+hits;place()};place();
+}
+function startSequence(){
+  launchGameScreen();
+ const seq=[];let user=[],level=1,locked=true;
+ $('gameArea').innerHTML=`<div><h3>🟦 Sequence Memory</h3><p id="seqStatus" style="color:var(--muted);margin:7px">Watch the sequence.</p><div id="seqBtns" class="row" style="justify-content:center;max-width:260px;margin:18px auto"></div></div>`;
+ const colors=['🟥','🟩','🟦','🟨'];$('seqBtns').innerHTML=colors.map((c,i)=>`<button class="cell" onclick="window.__seq(${i})">${c}</button>`).join('');
+ function round(){locked=true;user=[];seq.push(Math.floor(Math.random()*4));$('seqStatus').textContent='Watch… Level '+level;let i=0;const t=setInterval(()=>{if(i<seq.length){$('seqStatus').textContent=colors[seq[i]];i++}else{clearInterval(t);$('seqStatus').textContent='Your turn';locked=false}},550)}
+ window.__seq=i=>{if(locked)return;user.push(i);if(user[user.length-1]!==seq[user.length-1]){locked=true;$('seqStatus').textContent='Game over — level '+level;toast('Try again!');return}if(user.length===seq.length){level++;round()}};
+ round();
+}
+
+
+function saveRecord(name,score){
+  state.records[name]=Math.max(Number(state.records[name]||0),Number(score)||0);
+  localStorage.setItem('nova_records',JSON.stringify(state.records));renderRecords();updateLevel();
+}
+function start2048(){
+  launchGameScreen();
+  let board=[2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0],score=0;
+  function add(){const z=board.map((v,i)=>v?null:i).filter(x=>x!==null);if(z.length)board[z[Math.floor(Math.random()*z.length)]]=2}
+  function move(dir){
+    const old=board.join(','), lines=[];
+    for(let r=0;r<4;r++)lines.push(board.slice(r*4,r*4+4));
+    function slide(a){a=a.filter(Boolean);for(let i=0;i<a.length-1;i++)if(a[i]===a[i+1]){a[i]*=2;score+=a[i];a.splice(i+1,1)}while(a.length<4)a.push(0);return a}
+    if(dir==='left')board=lines.flatMap(slide);
+    if(dir==='right')board=lines.flatMap(a=>slide(a.reverse()).reverse());
+    if(dir==='up'){let n=Array(16).fill(0);for(let c=0;c<4;c++){let a=[];for(let r=0;r<4;r++)a.push(board[r*4+c]);a=slide(a);for(let r=0;r<4;r++)n[r*4+c]=a[r]}board=n}
+    if(dir==='down'){let n=Array(16).fill(0);for(let c=0;c<4;c++){let a=[];for(let r=3;r>=0;r--)a.push(board[r*4+c]);a=slide(a);for(let r=0;r<4;r++)n[(3-r)*4+c]=a[r]}board=n}
+    if(board.join(',')!==old)add();
+    render();
+  }
+  function render(){$('gameArea').innerHTML=`<div><h3>🧩 2048 Mini</h3><p style="color:var(--muted)">Use buttons or arrow keys.</p><div id="g2048" style="display:grid;grid-template-columns:repeat(4,65px);gap:7px;margin:15px auto"></div><b>Score: ${score}</b><div class="row" style="justify-content:center;margin-top:12px">${[['←','left'],['↑','up'],['↓','down'],['→','right']].map(x=>`<button class="btn" onclick="window.__2048('${x[1]}')">${x[0]}</button>`).join('')}</div></div>`;$('g2048').innerHTML=board.map(v=>`<div style="height:65px;display:grid;place-items:center;border-radius:12px;background:rgba(124,92,255,${v?'.22':'.05'});font-size:20px;font-weight:800">${v||''}</div>`).join('')}
+  window.__2048=move;add();add();render();
+  window.__2048Key=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();move({ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'}[e.key])}};
+  document.addEventListener('keydown',window.__2048Key,{once:false});
+}
+function startWordScramble(){
+  launchGameScreen();
+  const words=['javascript','computer','galaxy','football','keyboard','robotics','adventure','science','creative','browser'];
+  const word=words[Math.floor(Math.random()*words.length)];let scr=word.split('').sort(()=>Math.random()-.5).join('');
+  $('gameArea').innerHTML=`<div><h3>🔤 Word Scramble</h3><p style="color:var(--muted)">Unscramble this word:</p><div style="font-size:34px;margin:18px">${scr}</div><input id="wordA" placeholder="Your answer"><button class="btn primary" onclick="checkWord()">Check</button><p id="wordOut" style="margin-top:15px"></p></div>`;
+  window.__word=word;
+}
+function checkWord(){const a=$('wordA').value.trim().toLowerCase();$('wordOut').innerHTML=a===window.__word?`🏆 Correct! <b>${window.__word}</b>`:`Not quite — try again.`;if(a===window.__word)saveRecord('Word Scramble',1)}
+function startQuiz(){
+  launchGameScreen();
+  const qs=[
+    ['What is the largest planet?',['Earth','Jupiter','Mars','Venus'],1],
+    ['Which language runs in a browser?',['Python','JavaScript','C++','Java'],1],
+    ['How many continents are there?',['5','6','7','8'],2],
+    ['What does CPU stand for?',['Central Processing Unit','Computer Power Unit','Core Program Utility','Central Program User'],0],
+    ['Which is a search engine?',['Google','Photoshop','Excel','Bluetooth'],0],
+    ['What gas do plants use?',['Oxygen','Nitrogen','Carbon dioxide','Helium'],2],
+    ['How many sides does a hexagon have?',['5','6','7','8'],1],
+    ['Which is a web markup language?',['HTML','SQL','Python','C'],0],
+    ['Which ocean is largest?',['Atlantic','Indian','Pacific','Arctic'],2],
+    ['What is 12 × 8?',['86','96','108','112'],1]
+  ];let i=0,score=0;
+  function render(){if(i>=qs.length){$('gameArea').innerHTML=`<div><h3>🧠 Quiz complete!</h3><div style="font-size:42px;margin:15px">${score}/10</div><button class="btn primary" onclick="startQuiz()">Play again</button></div>`;saveRecord('Quick Quiz',score);return}const q=qs[i];$('gameArea').innerHTML=`<div><h3>🧠 Quick Quiz</h3><p style="color:var(--muted)">Question ${i+1}/10</p><h3 style="margin:18px 0">${q[0]}</h3><div class="grid" style="grid-template-columns:1fr 1fr">${q[1].map((a,n)=>`<button class="btn" onclick="window.__quiz(${n})">${a}</button>`).join('')}</div></div>`}
+  window.__quiz=n=>{if(n===qs[i][2])score++;i++;render()};render();
+}
+function startCoin(){
+  launchGameScreen();
+  let streak=0;function render(){ $('gameArea').innerHTML=`<div><h3>🪙 Coin Flip Streak</h3><div style="font-size:54px;margin:18px">🔥 ${streak}</div><button class="btn primary" onclick="window.__coin()">Flip</button><p id="coinOut" style="margin-top:12px">Get 5 heads in a row.</p></div>`}
+  window.__coin=()=>{const head=Math.random()<.5;if(head){streak++;$('coinOut').textContent='Heads! Keep going.';saveRecord('Coin Streak',streak)}else{streak=0;$('coinOut').textContent='Tails! Streak reset.'}render()};render();
+}
+
+function openCommand(){$('commandModal').classList.add('show');$('commandInput').value='';renderCommands();setTimeout(()=>$('commandInput').focus(),50)}
+function closeCommand(){$('commandModal').classList.remove('show')}
+const commands=[['✦','Nova AI','nova'],['🔎','Web Search','search'],['🎮','Games','games'],['🎬','Movies','movies'],['🎵','Songs','songs'],['🏆','Sports','sports'],['✨','Discover','discover'],['🏅','Leaderboard','leaderboard'],['❤','Health','health'],['📚','Education','education'],['☪','Quran & Islam','islam'],['🛍','Shopping & Food','shopping'],['📝','Workspace','workspace'],['★','Favorites','favorites'],['⚙','Settings','settings'],['👑','About Nova','owner']];
+function renderCommands(){
+ const q=$('commandInput').value.toLowerCase();
+ $('commands').innerHTML=commands.filter(x=>(x[1]+' '+x[2]).toLowerCase().includes(q)).map(x=>`<button class="btn" style="width:100%;text-align:left;margin:4px 0" onclick="showPage('${x[2]}');closeCommand()">${x[0]} &nbsp; ${x[1]}</button>`).join('')||'<p style="color:var(--muted);padding:10px">No command found.</p>';
+}
+
+function renderRecords(){
+  const entries=Object.entries(state.records).sort((a,b)=>b[1]-a[1]);
+  $('records').innerHTML=entries.length?entries.map((x,i)=>`<div class="leader"><span class="rank">#${i+1}</span><span>${escapeHtml(x[0])}</span><span class="score">${x[1]}</span></div>`).join(''):'<div class="empty">Play games to create records.</div>';
+  const ach=[
+    ['🚀','First launch',true],
+    ['💬','Ask Nova',state.chats>0],
+    ['★','Save a favorite',state.favs.length>0],
+    ['📝','Create a task',state.tasks.length>0],
+    ['🎮','Play an arcade game',Object.keys(state.records).length>0],
+    ['🔎','Search Google',state.history.length>0]
+  ];
+  $('achievements').innerHTML=ach.map(a=>`<div class="leader"><span>${a[0]}</span><span>${a[1]}</span><span>${a[2]?'✓':'○'}</span></div>`).join('');
+}
+function updateLevel(){
+  const xp=state.chats*2+state.favs.length*3+state.tasks.length*2+state.history.length+Object.keys(state.records).length*5;
+  const level=Math.floor(xp/20)+1,progress=(xp%20)*5;
+  if($('novaLevel')){$('novaLevel').textContent=level;$('levelProgress').style.width=progress+'%';$('levelText').textContent=`${xp%20}/20 XP to level ${level+1}`;}
+}
+function renderDiscover(){
+  const ideas=[
+    ['🤖','AI & Future','Explore AI breakthroughs, agents and robotics.'],
+    ['🚀','Space','Discover missions, planets and astronomy.'],
+    ['🎮','Gaming','Find games, esports and gaming technology.'],
+    ['🔬','Science','Explore discoveries and surprising facts.'],
+    ['🌍','World','Explore places, cultures and global stories.'],
+    ['💡','Inventions','Discover inventions that changed the world.']
+  ];
+  $('discoverGrid').innerHTML=ideas.map(x=>`<div class="card"><div class="bigico">${x[0]}</div><h4>${x[1]}</h4><p>${x[2]}</p><button class="btn primary" onclick="googleSearch(${JSON.stringify(x[1]+' latest discoveries')})">Explore ↗</button></div>`).join('');
+}
+function updatePulse(){
+  const d=new Date();$('pulseTime').textContent=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});$('pulseDate').textContent=d.toLocaleDateString([], {month:'short',day:'numeric'});
+  $('pulseSearches').textContent=state.history.length;$('pulseFavs').textContent=state.favs.length;$('pulseStreak').textContent=state.streak;
+  updateLevel();
+}
+
+function saveIdeaLab(){const v=$('ideaLab').value;localStorage.setItem('nova_idea_lab',v);$('ideaStatus').textContent='Saved ✓';setTimeout(()=>$('ideaStatus').textContent='',1800);}
+function addTaskFromPreset(t){$('taskInput').value=t;addTask();showPage('workspace');}
+function resetNova(){if(!confirm('Reset Nova Verse local data?'))return;['nova_chats','nova_favs','nova_tasks','nova_notes','nova_searches','nova_chat_messages'].forEach(k=>localStorage.removeItem(k));location.reload()}
+
+initLanguage();
+restoreRememberedLogin();
+
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',function(e){
+ e.preventDefault();
+ const page=this.dataset.page;
+ if(page==='sports')renderSports();
+ if(page==='education')renderEducation();
+ if(page==='islam')renderIslam();
+ showPage(page);
+}));
+document.addEventListener('keydown',e=>{
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand()}
+ if((e.ctrlKey||e.metaKey)&&e.key==='/'){e.preventDefault();$('globalSearch').focus()}
+ if(e.key==='Escape'){closeCommand();closeGameScreen()}
+});
+
+function launchGameScreen(){
+  openGameScreen();
+}
+
+function openGameScreen(){
+  const area=$('gameArea');
+  if(!area)return;
+  area.classList.add('game-open');
+  const close=$('gameClose');
+  if(close)close.style.display='block';
+  document.body.classList.add('game-screen-active');
+  document.body.style.overflow='hidden';
+}
+function closeGameScreen(){
+  const area=$('gameArea');
+  if(area)area.classList.remove('game-open');
+  const close=$('gameClose');
+  if(close)close.style.display='none';
+  document.body.classList.remove('game-screen-active');
+  document.body.style.overflow='';
+}
+
+
+/* NOVA COMPETITION UPGRADES */
+function addXP(points,reason){
+  state.xp=(state.xp||0)+points; localStorage.setItem('nova_xp',state.xp);
+  updateLevel(); renderProfile();
+  if(reason)toast('+'+points+' XP • '+reason+' ✨');
+}
+function renderProfile(){
+ const u=getCurrentUser()||'Guest'; const user=findUser(u); const name=user?.user?.username||u||'Guest';
+ if($('profileName'))$('profileName').textContent=name;
+ if($('profileXP'))$('profileXP').textContent=state.xp||0;
+ if($('profileChats'))$('profileChats').textContent=state.chats;
+ if($('profileSearches'))$('profileSearches').textContent=state.history.length;
+ if($('profileStreak'))$('profileStreak').textContent=state.streak;
+ if($('profileFavs'))$('profileFavs').textContent=state.favs.length;
+ const level=Math.floor((state.xp||0)/100)+1, pct=(state.xp||0)%100;
+ if($('profileProgress'))$('profileProgress').style.width=pct+'%';
+ if($('profileLevelText'))$('profileLevelText').textContent='Level '+level+' • '+pct+'/100 XP to next level';
+}
+function startVoiceInput(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){toast('Voice input is not supported in this browser. Try Chrome or Edge.');return;}
+ const r=new SR();r.lang=(localStorage.getItem('nova_language')||'en')==='ar'?'ar-SA':(localStorage.getItem('nova_language')||'en-US');r.interimResults=false;r.maxAlternatives=1;
+ toast('🎤 Listening…');r.onresult=e=>{$('aiInput').value=e.results[0][0].transcript;sendAI()};r.onerror=()=>toast('Voice input stopped.');r.start();
+}
+function speakNova(text){
+ if(!('speechSynthesis' in window))return;
+ const clean=document.createElement('div');clean.innerHTML=text;const u=new SpeechSynthesisUtterance(clean.textContent);u.lang=(localStorage.getItem('nova_language')||'en')==='ar'?'ar-SA':'en-US';speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+/* Academy quiz */
+const academyQuestions=[
+ {q:'What does HTML mainly define?',o:['Page structure','Database passwords','Wi-Fi speed','CPU temperature'],a:0},
+ {q:'Which language is used to style a web page?',o:['CSS','SQL','Python','JSON'],a:0},
+ {q:'What does BMI use?',o:['Weight and height','Only age','Only heart rate','Sleep hours'],a:0},
+ {q:'What does JavaScript add to web pages?',o:['Interactivity','Electricity','Internet service','A physical screen'],a:0},
+ {q:'What is a browser?',o:['Software that displays web content','A type of keyboard','A database','A game console'],a:0}
+];
+let quizIndex=0,quizScore=0,quizLocked=false;
+function startAcademyQuiz(){showPage('academy');quizIndex=0;quizScore=0;quizLocked=false;renderQuiz()}
+function renderQuiz(){const q=academyQuestions[quizIndex];if(!q)return;$('quizQuestion').textContent=(quizIndex+1)+'. '+q.q;$('quizOptions').innerHTML=q.o.map((x,i)=>`<button class="btn" onclick="answerQuiz(${i})">${escapeHtml(x)}</button>`).join('');$('quizScore').textContent='Score: '+quizScore+'/'+academyQuestions.length}
+function answerQuiz(i){if(quizLocked)return;quizLocked=true;const q=academyQuestions[quizIndex];if(i===q.a){quizScore++;addXP(10,'Correct quiz answer')}else toast('Not quite — keep learning!');setTimeout(()=>{quizIndex++;quizLocked=false;if(quizIndex<academyQuestions.length)renderQuiz();else{$('quizQuestion').textContent='🎉 Quiz complete!';$('quizOptions').innerHTML='';$('quizScore').innerHTML='<b>Final score: '+quizScore+'/'+academyQuestions.length+'</b>';addXP(quizScore*20,'Quiz completed')}},450)}
+const flashcards=[['HTML','HTML defines the structure of a web page.'],['CSS','CSS controls presentation and layout.'],['JavaScript','JavaScript can add interactive behavior.'],['BMI','BMI is calculated from weight and height; children and teens need age-specific interpretation.'],['Search','Precise search phrases can help find useful web results.']];let flashIndex=0,flashRevealed=false;
+function initAcademy(){if(!$('flashcard'))return;flashRevealed=false;$('flashcard').textContent=flashcards[flashIndex][0];renderQuiz()}
+function revealFlashcard(){flashRevealed=true;$('flashcard').textContent=flashcards[flashIndex][1];addXP(3,'Flashcard review')}
+function nextFlashcard(){flashIndex=(flashIndex+1)%flashcards.length;flashRevealed=false;$('flashcard').textContent=flashcards[flashIndex][0]}
+/* daily challenge + streak */
+function dailyChallenge(){
+ const games=['startTicTacToe','startMemory','startReaction','startGuess','startRPS','startMathGame','startTarget','startSequence','start2048','startWordScramble','startQuiz','startCoin'];
+ addXP(5,'Daily challenge'); const fn=games[Math.floor(Math.random()*games.length)]; if(typeof window[fn]==='function')window[fn](); showPage('games');
+}
+/* richer command center */
+function renderCommands(){
+ const q=($('commandInput')?.value||'').toLowerCase().trim();const cmds=[
+ ['🤖','Nova AI','nova'],['🔎','Google Search','search'],['🎮','Games','games'],['❤️','Health Lab','health'],['📚','Nova Academy','academy'],['☪','Quran & Islam','islam'],['📝','Workspace','workspace'],['👤','My Profile','profile'],['🏆','Competition Mode','competition'],['⚙','Settings','settings']];
+ $('commands').innerHTML=cmds.filter(x=>!q||x[1].toLowerCase().includes(q)).map(x=>`<div class="result" style="display:flex;justify-content:space-between;align-items:center"><span>${x[0]} <b>${x[1]}</b></span><button class="btn" onclick="closeCommand();showPage('${x[2]}')">Open</button></div>`).join('')||'<p style="color:var(--muted)">No command found.</p>';
+}
+function openCommand(){ $('commandModal').classList.add('show'); $('commandInput').value=''; renderCommands(); setTimeout(()=>$('commandInput').focus(),50)}
+function closeCommand(){$('commandModal').classList.remove('show')}
+function init(){
+  const idea=localStorage.getItem('nova_idea_lab'); if($('ideaLab')) $('ideaLab').value=idea||'';
+ renderHome();renderList(movies,'movieGrid','movie');renderList(songs,'songGrid','song');renderDiscover();renderRecords();updatePulse();setInterval(updatePulse,1000);
+ renderSports();renderEducation();renderIslam();renderShops();renderHistory();renderTasks();initHealthChecklist();renderProfile();initAcademy();renderCommands();
+ $('notes').value=state.notes;paintTimer();initChat();
+}
+init();
+
+
+
+</script>
+
+<div class="auth-overlay" id="authOverlay" onclick="if(event.target===this)closeAuth()">
+  <div class="auth-box">
+    <div class="auth-logo">🚀</div>
+    <h2>Welcome to Nova</h2>
+    <div class="auth-sub">Sign in to personalize your Nova Verse experience.</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTab" onclick="authTab('login')">Login</button>
+      <button class="auth-tab" id="signupTab" onclick="authTab('signup')">Create account</button>
+    </div>
+
+    <div class="field">
+      <label id="authUsernameLabel">Username or Email</label>
+      <input id="authEmail" autocomplete="username" placeholder="Enter your username or email">
+    </div>
+
+    <div class="field" id="authEmailWrap" style="display:none">
+      <label>Email address</label>
+      <input id="authSignupEmail" type="email" autocomplete="email" placeholder="Enter your email address">
+    </div>
+
+    <div class="field" id="authPassWrap">
+      <label>Password</label>
+      <input id="authPass" type="password" autocomplete="current-password" placeholder="Enter your password">
+    </div>
+
+    <div id="authConfirmWrap" class="field" style="display:none">
+      <label>Confirm password</label>
+      <input id="authConfirm" type="password" autocomplete="new-password" placeholder="Repeat your password">
+    </div>
+
+    <label class="remember-row" id="rememberWrap">
+      <input type="checkbox" id="rememberMe">
+      <span>Remember me on this device</span>
+    </label>
+
+    <div class="auth-links" id="forgotLink">
+      <button class="auth-link" type="button" onclick="showForgotPassword()">Forgot password?</button>
+    </div>
+
+    <div id="authError" class="auth-error"></div>
+    <div id="authSuccess" class="auth-success"></div>
+
+    <button class="btn primary" id="authSubmit" style="width:100%" onclick="submitAuth()">Login to Nova</button>
+
+    <div id="authRecovery" class="recovery-box" style="display:none">
+      <div class="recovery-title">🔑 Reset your password</div>
+      <input id="recoveryUsername" type="hidden">
+      <p class="recovery-hint" id="recoveryHint">Confirm your registered email.</p>
+
+      <div class="field">
+        <label>Registered email</label>
+        <input id="recoveryEmail" type="email" autocomplete="email" placeholder="Enter your registered email">
+      </div>
+
+      <div class="field">
+        <label>New password</label>
+        <input id="newPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+      </div>
+
+      <div class="field">
+        <label>Confirm new password</label>
+        <input id="newPasswordConfirm" type="password" autocomplete="new-password" placeholder="Repeat your new password">
+      </div>
+
+      <button class="btn primary" type="button" style="width:100%" onclick="resetPassword()">Reset password</button>
+    </div>
+
+    <button class="btn" id="authBack" type="button" style="width:100%;margin-top:9px;display:none" onclick="backToLogin()">← Back to Login</button>
+    <button class="btn" id="guestBtn" type="button" style="width:100%;margin-top:9px" onclick="closeAuth()">Continue as guest</button>
+
+    <div class="auth-note">
+      Demo/local login: username, email and password are stored only in this browser using localStorage.
+      “Remember me” keeps the login on this device. Password recovery verifies the username and registered email.
+      This is not a secure production authentication system and it does not send real emails.
+    </div>
+  </div>
+</div>
+</body>
+</html>
