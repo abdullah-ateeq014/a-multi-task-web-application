@@ -20,7 +20,7 @@ README.md — Project documentation
 
 HTML5
 
-CSS3
+CSS
 
 JavaScript
 
